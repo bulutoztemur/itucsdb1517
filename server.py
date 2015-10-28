@@ -23,6 +23,10 @@ def team_page():
 @app.route('/player')
 def player_page():
     return render_template('player.html')
+@app.route('/statistics')
+def statistics_page():
+    return render_template('statistics.html')
+
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
