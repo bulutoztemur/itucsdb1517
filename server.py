@@ -15,17 +15,23 @@ def home_page():
 
 @app.route('/login')
 def login_page():
-    return render_template('login.html')
+    now = datetime.datetime.now()
+    return render_template('login.html', current_time=now.ctime())
+    
 @app.route('/team')
 def team_page():
-    return render_template('team.html')
+    now = datetime.datetime.now()
+    return render_template('team.html', current_time=now.ctime())
 
 @app.route('/player')
 def player_page():
-    return render_template('player.html')
+    now = datetime.datetime.now()
+    return render_template('player.html', current_time=now.ctime())
+    
 @app.route('/statistics')
 def statistics_page():
-    return render_template('statistics.html')
+    now = datetime.datetime.now()
+    return render_template('statistics.html', current_time=now.ctime())
 
 
 if __name__ == '__main__':
