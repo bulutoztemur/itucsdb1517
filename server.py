@@ -29,9 +29,5 @@ def statistics_page():
 
 
 if __name__ == '__main__':
-    VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
-    if VCAP_APP_PORT is not None:
-        port, debug = int(VCAP_APP_PORT), False
-    else:
-        port, debug = 5000, True
-    app.run(host='0.0.0.0', port=port, debug=debug)
+    PORT = int(os.getenv('VCAP_APP_PORT', '5000'))
+    app.run(host='0.0.0.0', port=int(PORT))
