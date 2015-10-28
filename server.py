@@ -11,7 +11,7 @@ app = Flask(__name__)
 @app.route('/')
 def home_page():
     now = datetime.datetime.now()
-    return render_template('index.html', current_time=now.ctime())
+    return render_template('home.html', current_time=now.ctime())
 
 @app.route('/login')
 def login_page():
@@ -19,6 +19,10 @@ def login_page():
 @app.route('/team')
 def team_page():
     return render_template('team.html')
+
+@app.route('/player')
+def player_page():
+    return render_template('player.html')
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
