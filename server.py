@@ -16,6 +16,9 @@ def home_page():
 @app.route('/login')
 def login_page():
     return render_template('login.html')
+@app.route('/team')
+def team_page():
+    return render_template('team.html')
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
