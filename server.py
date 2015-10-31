@@ -1,12 +1,11 @@
 import datetime
 import os
 
-from flask import Flask
 from flask import render_template
-
-
-app = Flask(__name__)
-
+from config import app
+import team_views
+import player_views
+import statistics_views
 
 @app.route('/')
 def home_page():
@@ -17,21 +16,6 @@ def home_page():
 def login_page():
     now = datetime.datetime.now()
     return render_template('login.html', current_time=now.ctime())
-
-@app.route('/team')
-def team_page():
-    now = datetime.datetime.now()
-    return render_template('team.html', current_time=now.ctime())
-
-@app.route('/player')
-def player_page():
-    now = datetime.datetime.now()
-    return render_template('player.html', current_time=now.ctime())
-
-@app.route('/statistics')
-def statistics_page():
-    now = datetime.datetime.now()
-    return render_template('statistics.html', current_time=now.ctime())
 
 
 if __name__ == '__main__':
