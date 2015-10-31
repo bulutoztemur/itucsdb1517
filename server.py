@@ -17,7 +17,7 @@ def home_page():
 def login_page():
     now = datetime.datetime.now()
     return render_template('login.html', current_time=now.ctime())
-    
+
 @app.route('/team')
 def team_page():
     now = datetime.datetime.now()
@@ -27,7 +27,7 @@ def team_page():
 def player_page():
     now = datetime.datetime.now()
     return render_template('player.html', current_time=now.ctime())
-    
+
 @app.route('/statistics')
 def statistics_page():
     now = datetime.datetime.now()
