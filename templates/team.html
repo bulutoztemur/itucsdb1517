@@ -11,4 +11,12 @@
 						<div class="title">Team</div>
 					</div><!--/.info-box-->
 				</div><!--/.col-->
+
+				<table>
+					{% for key, team in teams %}
+					<tr>
+					<td>{{ team.name }} ({{ team.color }})</td>
+					</tr>
+					{% endfor %}
+				</table>
 {% endblock %}
