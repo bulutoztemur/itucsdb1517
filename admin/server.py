@@ -19,14 +19,14 @@ def admin_page():
 
 
 @admin.route('/teams', methods=['GET','POST'])
-def team_page(key=None):
+def team_page():
     if request.method == 'GET':
         store = team_operations()
         teams=store.get_teams()
         now = datetime.datetime.now()
         return render_template('admin_teams.html', teams=teams, current_time=now.ctime())
     else:
-        if key==None:
+        if request.form['key_value']=='':
             name = request.form['name']
             color = request.form['color']
             team = Team(name, color,'10-01-10',1,1,0)
@@ -36,9 +36,10 @@ def team_page(key=None):
         else:
             name = request.form['name']
             color = request.form['color']
+            key = request.form['key_value']
             team = Team(name, color,'10-01-10',1,1,0)
             store = team_operations()
-            result=store.update_team(key,team)
+            result=store.update_team(key,name,color,'10-10-10',1,1)
             return redirect(url_for('admin.team_page'))
 
 @admin.route('/teams/add')

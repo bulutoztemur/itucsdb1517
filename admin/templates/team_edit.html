@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 {% block title %}Team Edit Form{% endblock %}
 {% block content %}
-{% set key = request.path.split('/')[-2] %}
-{% set action = url_for('team_page', key=key) if team else url_for('team_page') %}
+{% set key = request.path.split('/')[-1] if team else '' %}
+{% set action = url_for('admin.team_page') if team else url_for('admin.team_page') %}
 {% set name = team.name if team else '' %}
 {% set color = team.color if team else '' %}
-<form action="{{ url_for('admin.team_page') }}" method="post">
+<form action="{{ action }}" method="post">
 	<table>
 	<tr>
 	<th>Name:</th>
@@ -20,6 +20,7 @@
 	</td>
 	</tr>
 	</table>
+	<input type="hidden" name="key_value" value="{{ key }}">
 <input value="Save" name="save" type="submit" />
 </form>
 {% endblock %}

@@ -33,17 +33,24 @@ class team_operations:
             connection.close()
 
     def get_team(self, key):
-        team=None
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            cursor.execute("""SELECT objectid, name, shirtcolour, foundationdate, countryid, courtid FROM team where objectid=%s %s and deleted=B'0'""", (key,' '))
-            id, name, color, date, country, court = cursor
-            teams = [(id, Team(name,color,date,country,court,0)) for id, name, color, date, country, court in cursor]
-            team = teams[key]
+            statement = """SELECT objectid, name, shirtcolour, foundationdate, countryid, courtid FROM team where (objectid=%s and deleted=B'0')"""
+            cursor.execute(statement, (key,))
+            id,name,color,date,country,court=cursor.fetchone()
             cursor.close()
         except dbapi2.DatabaseError:
             connection.rollback()
         finally:
             connection.close()
-        return team
+        return Team(name, color, date, country, court, 0)
+
+    def update_team(self, key, name, color, date, country, court):
+        connection = dbapi2.connect(dsn)
+        cursor = connection.cursor()
+        statement = """update team set (name, shirtcolour, foundationdate, countryid, courtid, deleted) = (%s,%s,%s,%s,%s,B'0') where (objectid=(%s))"""
+        cursor.execute(statement, (name, color, date, country, court, key,))
+        connection.commit()
+        cursor.close()
+        connection.close()
