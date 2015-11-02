@@ -47,10 +47,27 @@ class team_operations:
         return Team(name, color, date, country, court, 0)
 
     def update_team(self, key, name, color, date, country, court):
-        connection = dbapi2.connect(dsn)
-        cursor = connection.cursor()
-        statement = """update team set (name, shirtcolour, foundationdate, countryid, courtid, deleted) = (%s,%s,%s,%s,%s,B'0') where (objectid=(%s))"""
-        cursor.execute(statement, (name, color, date, country, court, key,))
-        connection.commit()
-        cursor.close()
-        connection.close()
+        try:
+            connection = dbapi2.connect(dsn)
+            cursor = connection.cursor()
+            statement = """update team set (name, shirtcolour, foundationdate, countryid, courtid, deleted) = (%s,%s,%s,%s,%s,B'0') where (objectid=(%s))"""
+            cursor.execute(statement, (name, color, date, country, court, key,))
+            connection.commit()
+            cursor.close()
+        except dbapi2.DatabaseError:
+            connection.rollback()
+        finally:
+            connection.close()
+
+    def delete_team(self,key):
+        try:
+            connection = dbapi2.connect(dsn)
+            cursor = connection.cursor()
+            statement = """update team set deleted = B'1' where (objectid=(%s))"""
+            cursor.execute(statement, (key,))
+            connection.commit()
+            cursor.close()
+        except dbapi2.DatabaseError:
+            connection.rollback()
+        finally:
+            connection.close()

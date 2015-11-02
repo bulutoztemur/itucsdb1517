@@ -5,6 +5,7 @@
 {% set action = url_for('admin.team_page') if team else url_for('admin.team_page') %}
 {% set name = team.name if team else '' %}
 {% set color = team.color if team else '' %}
+<!--
 <form action="{{ action }}" method="post">
 	<table>
 	<tr>
@@ -23,4 +24,60 @@
 	<input type="hidden" name="key_value" value="{{ key }}">
 <input value="Save" name="save" type="submit" />
 </form>
+
+-->
+<!-- Form validations -->
+              <div class="row">
+                  <div class="col-lg-12">
+                      <section class="panel">
+                          <header class="panel-heading">
+                              Edit Team Panel
+                          </header>
+                          <div class="panel-body">
+                              <div class="form">
+                                  <form class="form-validate form-horizontal" id="feedback_form" method="post" action="{{ action }}">
+                                  <input type="hidden" name="key_value" value="{{ key }}">
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Name <span class="required"></span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control" id="cname" name="name" value="{{ name }}" type="text" />
+                                          </div>
+                                      </div>
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Team Color <span class="required"></span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control " id="cemail" type="text" name="color" value="{{ color }}"  />
+                                          </div>
+                                      </div>
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Team Foundation Date</label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control " id="curl" type="url" name="url" />
+                                          </div>
+                                      </div>
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Country <span class="required"></span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control" id="subject" name="subject" minlength="5" type="text"  />
+                                          </div>
+                                      </div>
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Court</label>
+                                          <div class="col-lg-10">
+                                             <input class="form-control" id="subject" name="subject" minlength="5" type="text"  />
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                          <div class="col-lg-offset-2 col-lg-10">
+                                              <button class="btn btn-primary" value="save" name="submit" type="submit">Save</button>
+                                              <button class="btn btn-default" value="cancel" name="submit" type="submit"" >Cancel</button>
+                                          </div>
+                                      </div>
+                                  </form>
+                              </div>
+
+                          </div>
+                      </section>
+                  </div>
+              </div>
 {% endblock %}
