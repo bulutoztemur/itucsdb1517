@@ -13,6 +13,9 @@ from flask import request
 from classes.team import Team
 from classes.team_operations import team_operations
 
+from classes.court import Court
+from classes.court_operations import court_operations
+
 @admin.route('/')
 def admin_page():
     return render_template('admin.html')
@@ -58,3 +61,46 @@ def team_edit_page(key=None):
     team = store.get_team(key) if key is not None else None
     now = datetime.datetime.now()
     return render_template('team_edit.html', team=team, current_time=now.ctime())
+
+@admin.route('/courts', methods=['GET','POST'])
+def court_page(key=None,operation=None):
+    if request.method == 'GET':
+        if request.args.get('operation') == 'delete':
+            store = court_operations()
+            result=store.delete_court(request.args.get('key'))
+            return redirect(url_for('admin.court_page'))
+        else:
+            store = court_operations()
+            courts=store.get_courts()
+            now = datetime.datetime.now()
+            return render_template('admin_courts.html', courts=courts, current_time=now.ctime())
+    else:
+        if request.form['submit']=='cancel':
+            return redirect(url_for('admin.court_page'))
+
+        else:
+            if request.form['key_value']=='':
+                name = request.form['name']
+                address = request.form['address']
+                capacity = request.form['capacity']
+                court = Court(name, address,capacity,0)
+                store = court_operations()
+                result=store.add_court(court)
+                return redirect(url_for('admin.court_page'))
+            else:
+                name = request.form['name']
+                address = request.form['address']
+                capacity = request.form['capacity']
+                key = request.form['key_value']
+                court = Court(name, address,capacity,0)
+                store = court_operations()
+                result=store.update_court(key, name, address, capacity)
+                return redirect(url_for('admin.court_page'))
+
+@admin.route('/courts/add')
+@admin.route('/courts/<int:key>')
+def court_edit_page(key=None):
+    store = court_operations()
+    court = store.get_court(key) if key is not None else None
+    now = datetime.datetime.now()
+    return render_template('court_edit.html', court=court, current_time=now.ctime())

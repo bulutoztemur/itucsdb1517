@@ -4,12 +4,21 @@
 
 <div class="row">
 <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-	<div style="margin-left:2.333%">
-	<h4>Team: </h4>
-	<div class="btn-group">
-        <a class="btn btn-default" href="{{ url_for('admin.team_page') }}">Team List</a>
-        <a class="btn btn-info" name="submit" href="{{ url_for('admin.team_edit_page') }}"  type="submit">Add New Team</a>
-	</div>
+	<div class="col-md-3">
+		<h4>Team: </h4>
+		<div class="btn-group">
+	        <a class="btn btn-default" href="{{ url_for('admin.team_page') }}">Team List</a>
+	        <a class="btn btn-info" name="submit" href="{{ url_for('admin.team_edit_page') }}"  type="submit">Add New Team</a>
+		</div>
+		</div>
+
+	<div class="col-md-3">
+		<h4>Court: </h4>
+		<div class="btn-group">
+	        <a class="btn btn-default" href="{{ url_for('admin.court_page') }}">Court List</a>
+	        <a class="btn btn-info" name="submit" href="{{ url_for('admin.court_edit_page') }}"  type="submit">Add New Court</a>
+		</div>
+		</div>
 	</div>
 </div>
 </div>
