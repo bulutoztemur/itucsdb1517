@@ -25,12 +25,18 @@ class team_operations:
 
     def add_team(self,Team):
         global connection
-        connection = dbapi2.connect(dsn)
-        cursor = connection.cursor()
-        cursor.execute("""INSERT INTO team (name, shirtcolour, foundationdate, countryid, courtid, deleted) VALUES (%s, %s, %s, %s, %s, B'%s')""",(Team.name,Team.color,Team.date,Team.country,Team.court,Team.deleted))
-        cursor.close()
-        connection.commit()
-        connection.close()
+        try:
+            connection = dbapi2.connect(dsn)
+            cursor = connection.cursor()
+            cursor.execute("""INSERT INTO team (name, shirtcolour, foundationdate, countryid, courtid, deleted) VALUES (%s, %s, %s, %s, %s, B'%s')""",(Team.name,Team.color,Team.date,Team.country,Team.court,Team.deleted))
+            cursor.close()
+            connection.commit()
+        except dbapi2.DatabaseError:
+            if connection:
+                connection.close()
+        finally:
+            if connection:
+                connection.close()
 
     def get_team(self, key):
         global connection
