@@ -21,16 +21,12 @@ class team_operations:
         return teams
 
     def add_team(self,Team):
-        try:
-            connection = dbapi2.connect(dsn)
-            cursor = connection.cursor()
-            cursor.execute("""INSERT INTO team (name, shirtcolour, foundationdate, countryid, courtid, deleted) VALUES (%s, %s, %s, %s, %s, B'%s')""",(Team.name,Team.color,Team.date,Team.country,Team.court,Team.deleted))
-            cursor.close()
-            connection.commit()
-        except dbapi2.DatabaseError:
-            connection.rollback()
-        finally:
-            connection.close()
+        connection = dbapi2.connect(dsn)
+        cursor = connection.cursor()
+        cursor.execute("""INSERT INTO team (name, shirtcolour, foundationdate, countryid, courtid, deleted) VALUES (%s, %s, %s, %s, %s, B'%s')""",(Team.name,Team.color,Team.date,Team.country,Team.court,Team.deleted))
+        cursor.close()
+        connection.commit()
+        connection.close()
 
     def get_team(self, key):
         try:
