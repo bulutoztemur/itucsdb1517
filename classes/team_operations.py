@@ -7,6 +7,7 @@ class team_operations:
 
     def get_teams(self):
         teams=[]
+        global connection
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
@@ -15,12 +16,15 @@ class team_operations:
             teams = [(key, Team(name,color,date,country,court,0)) for key, name, color, date, country, court in cursor]
             cursor.close()
         except dbapi2.DatabaseError:
-            connection.rollback()
+            if connection:
+                connection.close()
         finally:
-            connection.close()
+            if connection:
+                connection.close()
         return teams
 
     def add_team(self,Team):
+        global connection
         connection = dbapi2.connect(dsn)
         cursor = connection.cursor()
         cursor.execute("""INSERT INTO team (name, shirtcolour, foundationdate, countryid, courtid, deleted) VALUES (%s, %s, %s, %s, %s, B'%s')""",(Team.name,Team.color,Team.date,Team.country,Team.court,Team.deleted))
@@ -29,6 +33,7 @@ class team_operations:
         connection.close()
 
     def get_team(self, key):
+        global connection
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
@@ -39,10 +44,12 @@ class team_operations:
         except dbapi2.DatabaseError:
             connection.rollback()
         finally:
-            connection.close()
+            if connection:
+                connection.close()
         return Team(name, color, date, country, court, 0)
 
     def update_team(self, key, name, color, date, country, court):
+        global connection
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
@@ -53,9 +60,11 @@ class team_operations:
         except dbapi2.DatabaseError:
             connection.rollback()
         finally:
-            connection.close()
+            if connection:
+                connection.close()
 
     def delete_team(self,key):
+        global connection
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
@@ -66,4 +75,5 @@ class team_operations:
         except dbapi2.DatabaseError:
             connection.rollback()
         finally:
-            connection.close()
+            if connection:
+                connection.close()
