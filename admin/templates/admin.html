@@ -10,7 +10,7 @@
 	        <a class="btn btn-default" href="{{ url_for('admin.team_page') }}">Team List</a>
 	        <a class="btn btn-info" name="submit" href="{{ url_for('admin.team_edit_page') }}"  type="submit">Add New Team</a>
 		</div>
-		</div>
+	</div>
 
 	<div class="col-md-3">
 		<h4>Court: </h4>
@@ -18,8 +18,16 @@
 	        <a class="btn btn-default" href="{{ url_for('admin.court_page') }}">Court List</a>
 	        <a class="btn btn-info" name="submit" href="{{ url_for('admin.court_edit_page') }}"  type="submit">Add New Court</a>
 		</div>
+	</div>
+	<div class="col-md-3">
+		<h4>Transfer: </h4>
+		<div class="btn-group">
+	        <a class="btn btn-default" href="{{ url_for('admin.transfer_page') }}">Transfer List</a>
+	        <a class="btn btn-info" name="submit" href="{{ url_for('admin.transfer_edit_page') }}"  type="submit">Add New Transfer</a>
 		</div>
 	</div>
+
+</div>
 </div>
 </div>
 </hr>

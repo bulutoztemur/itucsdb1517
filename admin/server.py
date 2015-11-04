@@ -16,6 +16,9 @@ from classes.team_operations import team_operations
 from classes.court import Court
 from classes.court_operations import court_operations
 
+from classes.transfer import Transfer
+from classes.transfer_operations import transfer_operations
+
 @admin.route('/')
 def admin_page():
     return render_template('admin.html')
@@ -104,3 +107,48 @@ def court_edit_page(key=None):
     court = store.get_court(key) if key is not None else None
     now = datetime.datetime.now()
     return render_template('court_edit.html', court=court, current_time=now.ctime())
+
+@admin.route('/transfers', methods=['GET','POST'])
+def transfer_page(key=None,operation=None):
+    if request.method == 'GET':
+        if request.args.get('operation') == 'delete':
+            store = transfer_operations()
+            result=store.delete_transfer(request.args.get('key'))
+            return redirect(url_for('admin.transfer_page'))
+        else:
+            store = transfer_operations()
+            transfers=store.get_transfers()
+            now = datetime.datetime.now()
+            return render_template('admin_transfers.html', transfers=transfers, current_time=now.ctime())
+    else:
+        if request.form['submit']=='cancel':
+            return redirect(url_for('admin.transfer_page'))
+
+        else:
+            if request.form['key_value']=='':
+                playerid = request.form['playerid']
+                oldteamid = request.form['oldteamid']
+                newteamid = request.form['newteamid']
+                seasonid = request.form['seasonid']
+                transfer = Transfer(playerid, oldteamid,newteamid,seasonid,0)
+                store = transfer_operations()
+                result=store.add_transfer(transfer)
+                return redirect(url_for('admin.transfer_page'))
+            else:
+                playerid = request.form['playerid']
+                oldteamid = request.form['oldteamid']
+                newteamid = request.form['newteamid']
+                seasonid = request.form['seasonid']
+                key = request.form['key_value']
+                transfer = Transfer(playerid, oldteamid,newteamid,seasonid,0)
+                store = transfer_operations()
+                result=store.update_transfer(key, playerid, oldteamid,newteamid,seasonid)
+                return redirect(url_for('admin.transfer_page'))
+
+@admin.route('/transfers/add')
+@admin.route('/transfers/<int:key>')
+def transfer_edit_page(key=None):
+    store = transfer_operations()
+    transfer = store.get_transfer(key) if key is not None else None
+    now = datetime.datetime.now()
+    return render_template('transfer_edit.html', transfer=transfer, current_time=now.ctime())
