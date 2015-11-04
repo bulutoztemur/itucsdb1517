@@ -11,7 +11,7 @@ class court_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT objectid, name, address, capacity FROM court where deleted=B'0'"""
+            statement = """SELECT objectid, name, address, capacity FROM court where deleted=0"""
             cursor.execute(statement)
             courts = [(key, Court(name,address,capacity,0)) for key, name, address, capacity in cursor]
             cursor.close()
@@ -27,7 +27,7 @@ class court_operations:
 
         connection = dbapi2.connect(dsn)
         cursor = connection.cursor()
-        cursor.execute("""INSERT INTO court (name, address, capacity, deleted) VALUES (%s, %s, %s, B'%s')""",(Court.name,Court.address,Court.capacity,Court.deleted))
+        cursor.execute("""INSERT INTO court (name, address, capacity) VALUES (%s, %s, %s)""",(Court.name,Court.address,Court.capacity))
         cursor.close()
         connection.commit()
         connection.close()
@@ -37,7 +37,7 @@ class court_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT objectid, name, address, capacity FROM court where (objectid=%s and deleted=B'0')"""
+            statement = """SELECT objectid, name, address, capacity FROM court where (objectid=%s and deleted=0)"""
             cursor.execute(statement, (key,))
             id,name,address,capacity=cursor.fetchone()
             cursor.close()
@@ -53,7 +53,7 @@ class court_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """update court set (name, address, capacity, deleted) = (%s,%s,%s,B'0') where (objectid=(%s))"""
+            statement = """update court set (name, address, capacity) = (%s,%s,%s) where (objectid=(%s))"""
             cursor.execute(statement, (name, address, capacity, key,))
             connection.commit()
             cursor.close()
@@ -67,7 +67,7 @@ class court_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """update court set deleted = B'1' where (objectid=(%s))"""
+            statement = """update court set deleted = 1 where (objectid=(%s))"""
             cursor.execute(statement, (key,))
             connection.commit()
             cursor.close()
