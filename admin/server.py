@@ -11,13 +11,13 @@ from flask import redirect
 from flask import request
 
 from classes.team import Team
-from classes.team_operations import team_operations
+from classes.operations.team_operations import team_operations
 
 from classes.court import Court
-from classes.court_operations import court_operations
+from classes.operations.court_operations import court_operations
 
 from classes.transfer import Transfer
-from classes.transfer_operations import transfer_operations
+from classes.operations.transfer_operations import transfer_operations
 
 @admin.route('/')
 def admin_page():

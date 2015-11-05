@@ -7,7 +7,7 @@ from flask import request
 
 from config import app
 from classes.team import Team
-from classes.team_operations import team_operations
+from classes.operations.team_operations import team_operations
 
 @app.route('/team', methods=['GET','POST'])
 def team_page():

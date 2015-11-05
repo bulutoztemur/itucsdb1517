@@ -48,7 +48,8 @@ class team_operations:
             id,name,color,date,country,court=cursor.fetchone()
             cursor.close()
         except dbapi2.DatabaseError:
-            connection.rollback()
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
@@ -64,7 +65,8 @@ class team_operations:
             connection.commit()
             cursor.close()
         except dbapi2.DatabaseError:
-            connection.rollback()
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
@@ -79,7 +81,8 @@ class team_operations:
             connection.commit()
             cursor.close()
         except dbapi2.DatabaseError:
-            connection.rollback()
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()

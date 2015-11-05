@@ -16,7 +16,8 @@ class transfer_operations:
             transfers = [(key, Transfer(playerid, oldteamid, newteamid, seasonid, 0)) for key, playerid, oldteamid, newteamid, seasonid in cursor]
             cursor.close()
         except dbapi2.DatabaseError:
-            connection.rollback()
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
@@ -42,7 +43,8 @@ class transfer_operations:
             id,playerid,oldteamid,newteamid,seasonid=cursor.fetchone()
             cursor.close()
         except dbapi2.DatabaseError:
-            connection.rollback()
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
@@ -58,7 +60,8 @@ class transfer_operations:
             connection.commit()
             cursor.close()
         except dbapi2.DatabaseError:
-            connection.rollback()
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
@@ -72,7 +75,8 @@ class transfer_operations:
             connection.commit()
             cursor.close()
         except dbapi2.DatabaseError:
-            connection.rollback()
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()

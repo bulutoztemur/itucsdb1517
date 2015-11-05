@@ -16,7 +16,8 @@ class court_operations:
             courts = [(key, Court(name,address,capacity,0)) for key, name, address, capacity in cursor]
             cursor.close()
         except dbapi2.DatabaseError:
-            connection.rollback()
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
@@ -42,7 +43,8 @@ class court_operations:
             id,name,address,capacity=cursor.fetchone()
             cursor.close()
         except dbapi2.DatabaseError:
-            connection.rollback()
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
@@ -58,7 +60,8 @@ class court_operations:
             connection.commit()
             cursor.close()
         except dbapi2.DatabaseError:
-            connection.rollback()
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
@@ -72,7 +75,8 @@ class court_operations:
             connection.commit()
             cursor.close()
         except dbapi2.DatabaseError:
-            connection.rollback()
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
