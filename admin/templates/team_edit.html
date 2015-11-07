@@ -59,9 +59,13 @@
                                           </div>
                                       </div>
                                       <div class="form-group ">
-                                          <label class="control-label col-lg-2">Country <span class="required"></span></label>
-                                          <div class="col-lg-10">
-                                              <input class="form-control"  name="countryid" value="{{ countryid }}"  type="text"  />
+                                          <label class="control-label col-lg-2">Country</label>
+                                          <div class="col-md-2">
+                                             <select name="countryid" class="form-control m-bot15">
+												{% for key, country in countries %}
+													<option value={{country.objectid}} {%if country.objectid==countryid %}selected{% endif %}>{{country.name}}</option>
+												{% endfor %}
+                                          	</select>
                                           </div>
                                       </div>
                                       <div class="form-group ">

@@ -1,6 +1,7 @@
 import psycopg2 as dbapi2
 from classes.team import Team
 from classes.court import Court
+from classes.country import Country
 from classes.model_config import dsn, connection
 class team_operations:
     def __init__(self):
@@ -9,19 +10,13 @@ class team_operations:
     def get_teams(self):
         teams=[]
         global connection
-        try:
-            connection = dbapi2.connect(dsn)
-            cursor = connection.cursor()
-            statement = """SELECT team.objectid, team.name, team.shirtcolour, team.foundationdate, team.countryid, team.courtid, court.name, court.address, court.capacity FROM team  INNER JOIN court ON team.courtid = court.objectid WHERE team.deleted = 0 AND court.deleted = 0"""
-            cursor.execute(statement)
-            teams = [(key, Team(key,name,color,date,countryid,courtid,Court(courtid, courtname,courtaddress,courtcapacity,0), 0)) for key, name, color, date, countryid, courtid, courtname, courtaddress, courtcapacity in cursor]
-            cursor.close()
-        except dbapi2.DatabaseError:
-            if connection:
-                connection.close()
-        finally:
-            if connection:
-                connection.close()
+
+        connection = dbapi2.connect(dsn)
+        cursor = connection.cursor()
+        statement = """SELECT team.objectid, team.name, team.shirtcolour, team.foundationdate, team.countryid, country.name, team.courtid, court.name, court.address, court.capacity FROM team INNER JOIN court ON team.courtid = court.objectid INNER JOIN country ON team.countryid = country.objectid WHERE team.deleted = 0 AND court.deleted = 0 AND country.deleted = 0"""
+        cursor.execute(statement)
+        teams = [(key, Team(key,name,color,date,countryid,Country(countryid, countryname, 0),courtid,Court(courtid, courtname,courtaddress,courtcapacity,0), 0)) for key, name, color, date, countryid, countryname, courtid, courtname, courtaddress, courtcapacity in cursor]
+        cursor.close()
         return teams
 
     def add_team(self,Team):
@@ -54,7 +49,7 @@ class team_operations:
         finally:
             if connection:
                 connection.close()
-        return Team(None,name, color, date, countryid, courtid, None,0)
+        return Team(None,name, color, date, countryid, None, courtid, None,0)
 
     def update_team(self, key, name, color, date, countryid, courtid):
         global connection

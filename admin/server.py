@@ -45,7 +45,7 @@ def country_page(key=None,operation=None):
         else:
             if request.form['key_value']=='':
                 name = request.form['name']
-                country = Country(None ,name, 0)
+                country = Country(None,name, 0)
                 store = country_operations()
                 result=store.add_country(country)
                 return redirect(url_for('admin.country_page'))
@@ -89,7 +89,7 @@ def team_page(key=None,operation=None):
                 date = request.form['date']
                 countryid = request.form['countryid']
                 courtid = request.form['courtid']
-                team = Team(None,name, color, date, countryid, courtid, None, 0)
+                team = Team(None,name, color, date, countryid, None, courtid, None, 0)
                 store = team_operations()
                 result=store.add_team(team)
                 return redirect(url_for('admin.team_page'))
@@ -109,10 +109,12 @@ def team_page(key=None,operation=None):
 def team_edit_page(key=None):
     store = team_operations()
     storeCourt = court_operations()
+    storeCountry = country_operations()
     team = store.get_team(key) if key is not None else None
     courts = storeCourt.get_courts()
+    countries = storeCountry.get_countries()
     now = datetime.datetime.now()
-    return render_template('team_edit.html', team=team, courts=courts ,current_time=now.ctime())
+    return render_template('team_edit.html', team=team, courts=courts, countries=countries, current_time=now.ctime())
 
 @admin.route('/courts', methods=['GET','POST'])
 def court_page(key=None,operation=None):
