@@ -44,7 +44,10 @@ def team_page(key=None,operation=None):
             if request.form['key_value']=='':
                 name = request.form['name']
                 color = request.form['color']
-                team = Team(name, color,'10-01-10',1,1,0)
+                date = request.form['date']
+                countryid = request.form['countryid']
+                courtid = request.form['courtid']
+                team = Team(None,name, color, date, countryid, courtid, None, 0)
                 store = team_operations()
                 result=store.add_team(team)
                 return redirect(url_for('admin.team_page'))
@@ -52,9 +55,11 @@ def team_page(key=None,operation=None):
                 name = request.form['name']
                 color = request.form['color']
                 key = request.form['key_value']
-                team = Team(name, color,'10-01-10',1,1,0)
+                date = request.form['date']
+                countryid = request.form['countryid']
+                courtid = request.form['courtid']
                 store = team_operations()
-                result=store.update_team(key,name,color,'10-10-10',1,1)
+                result=store.update_team(key,name,color,date,countryid,courtid)
                 return redirect(url_for('admin.team_page'))
 
 @admin.route('/teams/add')

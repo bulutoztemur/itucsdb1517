@@ -5,6 +5,9 @@
 {% set action = url_for('admin.team_page') if team else url_for('admin.team_page') %}
 {% set name = team.name if team else '' %}
 {% set color = team.color if team else '' %}
+{% set date = team.date if team else '' %}
+{% set countryid = team.countryid if team else '' %}
+{% set courtid = team.courtid if team else '' %}
 <!--
 <form action="{{ action }}" method="post">
 	<table>
@@ -40,31 +43,31 @@
                                       <div class="form-group ">
                                           <label class="control-label col-lg-2">Name <span class="required"></span></label>
                                           <div class="col-lg-10">
-                                              <input class="form-control" id="cname" name="name" value="{{ name }}" type="text" />
+                                              <input class="form-control"  name="name" value="{{ name }}" type="text" />
                                           </div>
                                       </div>
                                       <div class="form-group ">
                                           <label class="control-label col-lg-2">Team Color <span class="required"></span></label>
                                           <div class="col-lg-10">
-                                              <input class="form-control " id="cemail" type="text" name="color" value="{{ color }}"  />
+                                              <input class="form-control "  type="text" name="color" value="{{ color }}"  />
                                           </div>
                                       </div>
                                       <div class="form-group ">
                                           <label class="control-label col-lg-2">Team Foundation Date</label>
                                           <div class="col-lg-10">
-                                              <input class="form-control " id="curl" type="url" name="url" />
+                                              <input class="form-control " name="date" value="{{ date }}" />
                                           </div>
                                       </div>
                                       <div class="form-group ">
                                           <label class="control-label col-lg-2">Country <span class="required"></span></label>
                                           <div class="col-lg-10">
-                                              <input class="form-control" id="subject" name="subject" minlength="5" type="text"  />
+                                              <input class="form-control"  name="countryid" value="{{ countryid }}"  type="text"  />
                                           </div>
                                       </div>
                                       <div class="form-group ">
                                           <label class="control-label col-lg-2">Court</label>
                                           <div class="col-lg-10">
-                                             <input class="form-control" id="subject" name="subject" minlength="5" type="text"  />
+                                             <input class="form-control"   name="courtid" value="{{ courtid }}" type="text"  />
                                           </div>
                                       </div>
                                       <div class="form-group">

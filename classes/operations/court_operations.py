@@ -11,7 +11,7 @@ class court_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT objectid, name, address, capacity FROM court where deleted=0"""
+            statement = """SELECT objectid, name, address, capacity FROM court WHERE deleted=0"""
             cursor.execute(statement)
             courts = [(key, Court(name,address,capacity,0)) for key, name, address, capacity in cursor]
             cursor.close()

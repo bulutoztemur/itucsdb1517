@@ -25,8 +25,8 @@
                                  <th> Team Name</th>
                                  <th>Team Color</th>
                                  <th> Foundation Date</th>
-                                 <th> Country</th>
-                                 <th> Court</th>
+                                 <th> Country Id</th>
+                                 <th> Court Name</th>
                                  <th> Action</th>
                               </tr>
                               {% for key, team in teams %}
@@ -34,8 +34,8 @@
                                  <td>{{team.name}}</td>
                                  <td>{{team.color}}</td>
                                  <td>{{team.date}}</td>
-                                 <td>{{team.country}}</td>
-                                 <td>{{team.court}}</td>
+                                 <td>{{team.countryid}}</td>
+                                 <td>{{team.court.name}}</td>
                                  <td>
                                   <div class="btn-group">
                                       <a class="btn btn-default" href="{{ url_for('admin.team_edit_page',key=key) }}">Update</a>
