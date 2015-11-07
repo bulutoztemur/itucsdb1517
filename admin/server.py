@@ -10,6 +10,9 @@ from flask import url_for
 from flask import redirect
 from flask import request
 
+from classes.country import Country
+from classes.operations.country_operations import country_operations
+
 from classes.team import Team
 from classes.operations.team_operations import team_operations
 
@@ -22,6 +25,45 @@ from classes.operations.transfer_operations import transfer_operations
 @admin.route('/')
 def admin_page():
     return render_template('admin.html')
+
+@admin.route('/country', methods=['GET','POST'])
+def country_page(key=None,operation=None):
+    if request.method == 'GET':
+        if request.args.get('operation') == 'delete':
+            store = country_operations()
+            result=store.delete_country(request.args.get('key'))
+            return redirect(url_for('admin.country_page'))
+        else:
+            store = country_operations()
+            countries=store.get_countries()
+            now = datetime.datetime.now()
+            return render_template('admin_countries.html', countries=countries, current_time=now.ctime())
+    else:
+        if request.form['submit']=='cancel':
+            return redirect(url_for('admin.country_page'))
+
+        else:
+            if request.form['key_value']=='':
+                name = request.form['name']
+                country = Country(None ,name, 0)
+                store = country_operations()
+                result=store.add_country(country)
+                return redirect(url_for('admin.country_page'))
+            else:
+                name = request.form['name']
+                key = request.form['key_value']
+                store = country_operations()
+                result=store.update_country(key, name)
+                return redirect(url_for('admin.country_page'))
+
+
+@admin.route('/country/add')
+@admin.route('/country/<int:key>')
+def country_edit_page(key=None):
+    store = country_operations()
+    country = store.get_country(key) if key is not None else None
+    now = datetime.datetime.now()
+    return render_template('country_edit.html', country=country, current_time=now.ctime())
 
 
 @admin.route('/teams', methods=['GET','POST'])
