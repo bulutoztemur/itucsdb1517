@@ -1,4 +1,4 @@
-class Court:
+class Country:
     def __init__(self, objectid, name, deleted):
         self.objectid = objectid
         self.name = name
