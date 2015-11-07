@@ -28,7 +28,7 @@ class country_operations:
 
         connection = dbapi2.connect(dsn)
         cursor = connection.cursor()
-        cursor.execute("""INSERT INTO country name VALUE %s""",(Country.name))
+        cursor.execute("""INSERT INTO country (name) VALUES (%s)""",(Country.name,))
         cursor.close()
         connection.commit()
         connection.close()
