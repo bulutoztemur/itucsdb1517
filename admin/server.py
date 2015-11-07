@@ -66,9 +66,11 @@ def team_page(key=None,operation=None):
 @admin.route('/teams/<int:key>')
 def team_edit_page(key=None):
     store = team_operations()
+    storeCourt = court_operations()
     team = store.get_team(key) if key is not None else None
+    courts = storeCourt.get_courts()
     now = datetime.datetime.now()
-    return render_template('team_edit.html', team=team, current_time=now.ctime())
+    return render_template('team_edit.html', team=team, courts=courts ,current_time=now.ctime())
 
 @admin.route('/courts', methods=['GET','POST'])
 def court_page(key=None,operation=None):
@@ -91,7 +93,7 @@ def court_page(key=None,operation=None):
                 name = request.form['name']
                 address = request.form['address']
                 capacity = request.form['capacity']
-                court = Court(name, address,capacity,0)
+                court = Court(None ,name, address,capacity,0)
                 store = court_operations()
                 result=store.add_court(court)
                 return redirect(url_for('admin.court_page'))
@@ -100,7 +102,6 @@ def court_page(key=None,operation=None):
                 address = request.form['address']
                 capacity = request.form['capacity']
                 key = request.form['key_value']
-                court = Court(name, address,capacity,0)
                 store = court_operations()
                 result=store.update_court(key, name, address, capacity)
                 return redirect(url_for('admin.court_page'))

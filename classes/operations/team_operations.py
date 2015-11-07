@@ -14,7 +14,7 @@ class team_operations:
             cursor = connection.cursor()
             statement = """SELECT team.objectid, team.name, team.shirtcolour, team.foundationdate, team.countryid, team.courtid, court.name, court.address, court.capacity FROM team  INNER JOIN court ON team.courtid = court.objectid WHERE team.deleted = 0 AND court.deleted = 0"""
             cursor.execute(statement)
-            teams = [(key, Team(key,name,color,date,countryid,courtid,Court(courtname,courtaddress,courtcapacity,0), 0)) for key, name, color, date, countryid, courtid, courtname, courtaddress, courtcapacity in cursor]
+            teams = [(key, Team(key,name,color,date,countryid,courtid,Court(courtid, courtname,courtaddress,courtcapacity,0), 0)) for key, name, color, date, countryid, courtid, courtname, courtaddress, courtcapacity in cursor]
             cursor.close()
         except dbapi2.DatabaseError:
             if connection:

@@ -66,8 +66,12 @@
                                       </div>
                                       <div class="form-group ">
                                           <label class="control-label col-lg-2">Court</label>
-                                          <div class="col-lg-10">
-                                             <input class="form-control"   name="courtid" value="{{ courtid }}" type="text"  />
+                                          <div class="col-md-2">
+                                             <select name="courtid" class="form-control m-bot15">
+												{% for key, court in courts %}
+													<option value={{court.objectid}} {%if court.objectid==courtid %}selected{% endif %}>{{court.name}}</option>
+												{% endfor %}
+                                          	</select>
                                           </div>
                                       </div>
                                       <div class="form-group">

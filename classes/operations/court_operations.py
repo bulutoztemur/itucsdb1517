@@ -13,7 +13,7 @@ class court_operations:
             cursor = connection.cursor()
             statement = """SELECT objectid, name, address, capacity FROM court WHERE deleted=0"""
             cursor.execute(statement)
-            courts = [(key, Court(name,address,capacity,0)) for key, name, address, capacity in cursor]
+            courts = [(key, Court(key,name,address,capacity,0)) for key, name, address, capacity in cursor]
             cursor.close()
         except dbapi2.DatabaseError:
             if connection:
@@ -48,7 +48,7 @@ class court_operations:
         finally:
             if connection:
                 connection.close()
-        return Court(name, address, capacity, 0)
+        return Court(None, name, address, capacity, 0)
 
     def update_court(self, key, name, address, capacity):
         global connection
