@@ -25,13 +25,18 @@ class country_operations:
 
     def add_country(self,Country):
         global connection
-
-        connection = dbapi2.connect(dsn)
-        cursor = connection.cursor()
-        cursor.execute("""INSERT INTO country (name) VALUES (%s)""",(Country.name,))
-        cursor.close()
-        connection.commit()
-        connection.close()
+        try:
+            connection = dbapi2.connect(dsn)
+            cursor = connection.cursor()
+            cursor.execute("""INSERT INTO country (name) VALUES (%s)""",(Country.name,))
+            cursor.close()
+            connection.commit()
+        except dbapi2.DatabaseError:
+            if connection:
+                connection.rollback()
+        finally:
+            if connection:
+                connection.close()
 
     def get_country(self, key):
         global connection
