@@ -29,13 +29,6 @@ from classes.operations.transfer_operations import transfer_operations
 def admin_page():
     return render_template('admin.html')
 
-@admin.route('/initdb')
-def initialize_database():
-    with dbapi2.connect(app.config['dsn']) as connection:
-        cursor.execute(open("dump.sql", "r").read())
-        connection.commit()
-    return redirect(url_for('admin_page'))
-
 @admin.route('/country', methods=['GET','POST'])
 def country_page(key=None,operation=None):
     if request.method == 'GET':
