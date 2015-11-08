@@ -9,12 +9,12 @@ class country_operations:
         global connection
         countries=[]
         try:
-            with dbapi2.connect(app.config['dsn']) as connection:
-                cursor = connection.cursor()
-                statement = """SELECT objectid, name FROM country WHERE deleted=0"""
-                cursor.execute(statement)
-                countries = [(key, Country(key,name,0)) for key, name in cursor]
-                cursor.close()
+            connection = dbapi2.connect(dsn)
+            cursor = connection.cursor()
+            statement = """SELECT objectid, name FROM country WHERE deleted=0"""
+            cursor.execute(statement)
+            countries = [(key, Country(key,name,0)) for key, name in cursor]
+            cursor.close()
         except dbapi2.DatabaseError:
             if connection:
                 connection.rollback()
@@ -26,17 +26,17 @@ class country_operations:
     def add_country(self,Country):
         global connection
 
-        with dbapi2.connect(app.config['dsn']) as connection:
-            cursor = connection.cursor()
-            cursor.execute("""INSERT INTO country (name) VALUES (%s)""",(Country.name,))
-            cursor.close()
-            connection.commit()
-            connection.close()
+        connection = dbapi2.connect(dsn)
+        cursor = connection.cursor()
+        cursor.execute("""INSERT INTO country (name) VALUES (%s)""",(Country.name,))
+        cursor.close()
+        connection.commit()
+        connection.close()
 
     def get_country(self, key):
         global connection
         try:
-            connection = dbapi2.connect(app.config['dsn'])
+            connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
             statement = """SELECT objectid, name FROM country where (objectid=%s and deleted=0)"""
             cursor.execute(statement, (key,))

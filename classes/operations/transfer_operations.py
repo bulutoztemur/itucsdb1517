@@ -25,13 +25,18 @@ class transfer_operations:
 
     def add_transfer(self,Transfer):
         global connection
-
-        connection = dbapi2.connect(dsn)
-        cursor = connection.cursor()
-        cursor.execute("""INSERT INTO transfer (playerid, oldteamid, newteamid, seasonid) VALUES (%s, %s, %s, %s)""",(Transfer.playerid,Transfer.oldteamid,Transfer.newteamid,Transfer.seasonid))
-        cursor.close()
-        connection.commit()
-        connection.close()
+        try:
+            connection = dbapi2.connect(dsn)
+            cursor = connection.cursor()
+            cursor.execute("""INSERT INTO transfer (playerid, oldteamid, newteamid, seasonid) VALUES (%s, %s, %s, %s)""",(Transfer.playerid,Transfer.oldteamid,Transfer.newteamid,Transfer.seasonid))
+            cursor.close()
+            connection.commit()
+        except dbapi2.DatabaseError:
+            if connection:
+                connection.close()
+        finally:
+            if connection:
+                connection.close()
 
     def get_transfer(self, key):
         global connection

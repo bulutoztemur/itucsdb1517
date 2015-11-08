@@ -25,13 +25,18 @@ class court_operations:
 
     def add_court(self,Court):
         global connection
-
-        connection = dbapi2.connect(dsn)
-        cursor = connection.cursor()
-        cursor.execute("""INSERT INTO court (name, address, capacity) VALUES (%s, %s, %s)""",(Court.name,Court.address,Court.capacity))
-        cursor.close()
-        connection.commit()
-        connection.close()
+        try:
+            connection = dbapi2.connect(dsn)
+            cursor = connection.cursor()
+            cursor.execute("""INSERT INTO court (name, address, capacity) VALUES (%s, %s, %s)""",(Court.name,Court.address,Court.capacity))
+            cursor.close()
+            connection.commit()
+        except dbapi2.DatabaseError:
+            if connection:
+                connection.close()
+        finally:
+            if connection:
+                connection.close()
 
     def get_court(self, key):
         global connection
