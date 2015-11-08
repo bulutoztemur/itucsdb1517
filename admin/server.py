@@ -6,9 +6,12 @@ admin = Blueprint('admin', __name__,template_folder='templates/')
 
 import datetime
 
+import psycopg2 as dbapi2
+
 from flask import url_for
 from flask import redirect
 from flask import request
+from flask.helpers import url_for
 
 from classes.country import Country
 from classes.operations.country_operations import country_operations
@@ -25,6 +28,13 @@ from classes.operations.transfer_operations import transfer_operations
 @admin.route('/')
 def admin_page():
     return render_template('admin.html')
+
+@admin.route('/initdb')
+def initialize_database():
+    with dbapi2.connect(app.config['dsn']) as connection:
+        cursor.execute(open("dump.sql", "r").read())
+        connection.commit()
+    return redirect(url_for('admin_page'))
 
 @admin.route('/country', methods=['GET','POST'])
 def country_page(key=None,operation=None):
