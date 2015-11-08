@@ -20,13 +20,6 @@ def get_elephantsql_dsn(vcap_services):
              dbname='{}'""".format(user, password, host, port, dbname)
     return dsn
 
-@app.route('/initdb')
-def initialize_database():
-    with dbapi2.connect(app.config['dsn']) as connection:
-        cursor = connection.cursor()
-        cursor.execute("""SELECT * FROM "public"."country" LIMIT 100""")
-        qweqwe=cursor.fetchone()
-    return "deneme %d deneme" % qweqwe
 @app.route('/')
 def home_page():
     now = datetime.datetime.now()
