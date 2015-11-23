@@ -192,7 +192,7 @@ def transfer_page(key=None,operation=None):
                 oldteamid = request.form['oldteamid']
                 newteamid = request.form['newteamid']
                 seasonid = request.form['seasonid']
-                transfer = Transfer(None,playerid, oldteamid, None, newteamid, None, seasonid, 0)
+                transfer = Transfer(None,playerid, oldteamid, None, newteamid, None, seasonid,None, 0)
                 store = transfer_operations()
                 result=store.add_transfer(transfer)
                 return redirect(url_for('admin.transfer_page'))
@@ -211,10 +211,12 @@ def transfer_page(key=None,operation=None):
 def transfer_edit_page(key=None):
     store = transfer_operations()
     storeTeam = team_operations()
+    storeSeason = season_operations()
     transfer = store.get_transfer(key) if key is not None else None
     teams = storeTeam.get_teams()
+    seasons = storeSeason.get_seasons()
     now = datetime.datetime.now()
-    return render_template('transfer_edit.html', transfer=transfer, teams=teams, current_time=now.ctime())
+    return render_template('transfer_edit.html', transfer=transfer, teams=teams,seasons=seasons, current_time=now.ctime())
 
 
 
