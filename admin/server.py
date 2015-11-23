@@ -16,6 +16,9 @@ from flask.helpers import url_for
 from classes.country import Country
 from classes.operations.country_operations import country_operations
 
+from classes.hand import Hand
+from classes.operations.hand_operations import hand_operations
+
 from classes.team import Team
 from classes.operations.team_operations import team_operations
 
@@ -24,6 +27,9 @@ from classes.operations.court_operations import court_operations
 
 from classes.transfer import Transfer
 from classes.operations.transfer_operations import transfer_operations
+
+from classes.position import Position
+from classes.operations.position_operations import position_operations
 
 @admin.route('/')
 def admin_page():
@@ -205,3 +211,83 @@ def transfer_edit_page(key=None):
     transfer = store.get_transfer(key) if key is not None else None
     now = datetime.datetime.now()
     return render_template('transfer_edit.html', transfer=transfer, current_time=now.ctime())
+
+
+
+@admin.route('/hand', methods=['GET','POST'])
+def hand_page(key=None,operation=None):
+    if request.method == 'GET':
+        if request.args.get('operation') == 'delete':
+            store = hand_operations()
+            result=store.delete_hand(request.args.get('key'))
+            return redirect(url_for('admin.hand_page'))
+        else:
+            store = hand_operations()
+            hands=store.get_hands()
+            now = datetime.datetime.now()
+            return render_template('admin_hands.html', hands=hands, current_time=now.ctime())
+    else:
+        if request.form['submit']=='cancel':
+            return redirect(url_for('admin.hand_page'))
+
+        else:
+            if request.form['key_value']=='':
+                name = request.form['name']
+                hand = Hand(None,name, 0)
+                store = hand_operations()
+                result=store.add_hand(hand)
+                return redirect(url_for('admin.hand_page'))
+            else:
+                name = request.form['name']
+                key = request.form['key_value']
+                store = hand_operations()
+                result=store.update_hand(key, name)
+                return redirect(url_for('admin.hand_page'))
+
+
+@admin.route('/hand/add')
+@admin.route('/hand/<int:key>')
+def hand_edit_page(key=None):
+    store = hand_operations()
+    hand = store.get_hand(key) if key is not None else None
+    now = datetime.datetime.now()
+    return render_template('hand_edit.html', hand=hand, current_time=now.ctime())
+
+@admin.route('/position', methods=['GET','POST'])
+def position_page(key=None,operation=None):
+    if request.method == 'GET':
+        if request.args.get('operation') == 'delete':
+            store = position_operations()
+            result=store.delete_position(request.args.get('key'))
+            return redirect(url_for('admin.position_page'))
+        else:
+            store = position_operations()
+            positions=store.get_positions()
+            now = datetime.datetime.now()
+            return render_template('admin_positions.html', positions=positions, current_time=now.ctime())
+    else:
+        if request.form['submit']=='cancel':
+            return redirect(url_for('admin.position_page'))
+
+        else:
+            if request.form['key_value']=='':
+                name = request.form['name']
+                position = Position(None,name, 0)
+                store = position_operations()
+                result=store.add_position(position)
+                return redirect(url_for('admin.position_page'))
+            else:
+                name = request.form['name']
+                key = request.form['key_value']
+                store = position_operations()
+                result=store.update_position(key, name)
+                return redirect(url_for('admin.position_page'))
+
+
+@admin.route('/position/add')
+@admin.route('/position/<int:key>')
+def position_edit_page(key=None):
+    store = position_operations()
+    position = store.get_position(key) if key is not None else None
+    now = datetime.datetime.now()
+    return render_template('position_edit.html', position=position, current_time=now.ctime())
