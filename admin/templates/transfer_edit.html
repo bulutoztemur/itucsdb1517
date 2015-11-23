@@ -26,15 +26,23 @@
                                           </div>
                                       </div>
                                       <div class="form-group ">
-                                          <label class="control-label col-lg-2">Old Team ID <span class="required"></span></label>
-                                          <div class="col-lg-10">
-                                              <input class="form-control " type="text" name="oldteamid" value="{{ oldteamid }}"  />
+                                          <label class="control-label col-lg-2">Old Team</label>
+                                          <div class="col-md-2">
+                                             <select name="oldteamid" class="form-control m-bot15">
+												{% for key, team in teams %}
+													<option value={{team.objectid}} {%if team.objectid==oldteamid %}selected{% endif %}>{{team.name}}</option>
+												{% endfor %}
+                                          	</select>
                                           </div>
                                       </div>
                                       <div class="form-group ">
-                                          <label class="control-label col-lg-2">New Team ID</label>
-                                          <div class="col-lg-10">
-                                              <input class="form-control " type="text" name="newteamid" value="{{ newteamid }}" />
+                                          <label class="control-label col-lg-2">New Team</label>
+                                          <div class="col-md-2">
+                                             <select name="newteamid" class="form-control m-bot15">
+												{% for key, team in teams %}
+													<option value={{team.objectid}} {%if team.objectid==newteamid %}selected{% endif %}>{{team.name}}</option>
+												{% endfor %}
+                                          	</select>
                                           </div>
                                       </div>
                                       <div class="form-group ">

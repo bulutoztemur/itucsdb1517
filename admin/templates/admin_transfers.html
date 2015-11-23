@@ -23,16 +23,16 @@
                            <tbody>
                               <tr>
                                  <th>Player ID</th>
-                                 <th>Old Team ID</th>
-                                 <th>New Team ID</th>
+                                 <th>Old Team </th>
+                                 <th>New Team </th>
                                  <th>Season ID</th>
                                  <th> Action</th>
                               </tr>
                               {% for key, transfer in transfers %}
                               <tr>
                                  <td>{{transfer.playerid}}</td>
-                                 <td>{{transfer.oldteamid}}</td>
-                                 <td>{{transfer.newteamid}}</td>
+                                 <td>{{transfer.team.name}}</td>
+                                 <td>{{transfer.team.name}}</td>
                                  <td>{{transfer.seasonid}}</td>
                                  <td>
                                   <div class="btn-group">

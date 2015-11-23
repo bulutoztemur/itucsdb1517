@@ -1,5 +1,6 @@
 import psycopg2 as dbapi2
 from classes.transfer import Transfer
+from classes.team import Team
 from classes.model_config import dsn, connection
 class transfer_operations:
     def __init__(self):
@@ -11,9 +12,9 @@ class transfer_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT objectid, playerid, oldteamid, newteamid, seasonid FROM transfer where deleted=0"""
+            statement = """SELECT transfer.objectid, transfer.playerid, transfer.oldteamid, team.name, transfer.newteamid, team.name, transfer.seasonid FROM transfer INNER JOIN team ON transfer.oldteamid=team.objectid INNER JOIN team ON transfer.newteamid=team.objectid where transfer.deleted=0"""
             cursor.execute(statement)
-            transfers = [(key, Transfer(playerid, oldteamid, newteamid, seasonid, 0)) for key, playerid, oldteamid, newteamid, seasonid in cursor]
+            transfers = [(key, Transfer(key, playerid, oldteamid,Team(oldteamid, name, color, date, countryid, country, courtid, court, 0), newteamid,Team(newteamid, name, color, date, countryid, country, courtid, court, 0), seasonid, 0)) for key, playerid, oldteamid, teamname, newteamid, teamname2, seasonid in cursor]
             cursor.close()
         except dbapi2.DatabaseError:
             if connection:

@@ -192,28 +192,29 @@ def transfer_page(key=None,operation=None):
                 oldteamid = request.form['oldteamid']
                 newteamid = request.form['newteamid']
                 seasonid = request.form['seasonid']
-                transfer = Transfer(playerid, oldteamid,newteamid,seasonid,0)
+                transfer = Transfer(None,playerid, oldteamid, None, newteamid, None, seasonid, 0)
                 store = transfer_operations()
                 result=store.add_transfer(transfer)
                 return redirect(url_for('admin.transfer_page'))
             else:
+                key = request.form['key_value']
                 playerid = request.form['playerid']
                 oldteamid = request.form['oldteamid']
                 newteamid = request.form['newteamid']
                 seasonid = request.form['seasonid']
-                key = request.form['key_value']
-                transfer = Transfer(playerid, oldteamid,newteamid,seasonid,0)
                 store = transfer_operations()
-                result=store.update_transfer(key, playerid, oldteamid,newteamid,seasonid)
+                result=store.update_transfer(key,playerid,oldteamid,newteamid,seasonid)
                 return redirect(url_for('admin.transfer_page'))
 
 @admin.route('/transfers/add')
 @admin.route('/transfers/<int:key>')
 def transfer_edit_page(key=None):
     store = transfer_operations()
+    storeTeam = team_operations()
     transfer = store.get_transfer(key) if key is not None else None
+    teams = storeTeam.get_teams()
     now = datetime.datetime.now()
-    return render_template('transfer_edit.html', transfer=transfer, current_time=now.ctime())
+    return render_template('transfer_edit.html', transfer=transfer, teams=teams, current_time=now.ctime())
 
 
 
