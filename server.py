@@ -6,6 +6,7 @@ import re
 
 from flask import render_template
 from config import app
+from classes.model_config import dsn
 import team_views
 import player_views
 import statistics_views
@@ -30,18 +31,20 @@ def login_page():
     now = datetime.datetime.now()
     return render_template('login.html', current_time=now.ctime())
 
-
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
     if VCAP_APP_PORT is not None:
         port, debug = int(VCAP_APP_PORT), False
     else:
         port, debug = 5000, True
-
+        
     VCAP_SERVICES = os.getenv('VCAP_SERVICES')
     if VCAP_SERVICES is not None:
+        dsn=get_elephantsql_dsn(VCAP_SERVICES)
         app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
     else:
+        dsn="""user='vagrant' password='vagrant'
+                               host='localhost' port=54321 dbname='itucsdb'"""
         app.config['dsn'] = """user='vagrant' password='vagrant'
                                host='localhost' port=54321 dbname='itucsdb'"""
 
