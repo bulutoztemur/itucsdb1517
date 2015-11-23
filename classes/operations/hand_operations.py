@@ -7,7 +7,7 @@ class hand_operations:
 
     def get_hands(self):
         global connection
-        hand=[]
+        hands=[]
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
@@ -19,7 +19,7 @@ class hand_operations:
             if connection:
                 connection.rollback()
         finally:
-            if connection: 
+            if connection:
                 connection.close()
         return hands
 
