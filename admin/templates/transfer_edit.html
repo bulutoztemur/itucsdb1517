@@ -46,9 +46,13 @@
                                           </div>
                                       </div>
                                       <div class="form-group ">
-                                          <label class="control-label col-lg-2">Season ID <span class="required"></span></label>
-                                          <div class="col-lg-10">
-                                              <input class="form-control" type="text" name="seasonid" value="{{ seasonid }}"  />
+                                          <label class="control-label col-lg-2">Season</label>
+                                          <div class="col-md-2">
+                                             <select name="seasonid" class="form-control m-bot15">
+												{% for key, season in seasons %}
+													<option value={{season.objectid}} {%if season.objectid==seasonid %}selected{% endif %}>{{season.name}}</option>
+												{% endfor %}
+                                          	</select>
                                           </div>
                                       </div>
 
