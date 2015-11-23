@@ -7,7 +7,7 @@ class season_operations:
 
     def get_seasons(self):
         global connection
-        countries=[]
+        seasons=[]
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
