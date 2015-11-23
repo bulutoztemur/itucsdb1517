@@ -1,15 +1,15 @@
 {% extends "layout.html" %}
-{% block title %}Country Edit Form{% endblock %}
+{% block title %}Hand Edit Form{% endblock %}
 {% block content %}
-{% set key = request.path.split('/')[-1] if country else '' %}
-{% set action = url_for('admin.country_page') if country else url_for('admin.country_page') %}
-{% set name = country.name if country else '' %}
+{% set key = request.path.split('/')[-1] if hand else '' %}
+{% set action = url_for('admin.hand_page') if hand else url_for('admin.hand_page') %}
+{% set name = hand.name if hand else '' %}
 
               <div class="row">
                   <div class="col-lg-12">
                       <section class="panel">
                           <header class="panel-heading">
-                              Edit Country Panel
+                              Edit Hand Panel
                           </header>
                           <div class="panel-body">
                               <div class="form">

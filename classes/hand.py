@@ -1,4 +1,4 @@
-class Country:
+class Hand:
     def __init__(self, objectid, name, deleted):
         self.objectid = objectid
         self.name = name

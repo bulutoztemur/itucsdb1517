@@ -1,53 +1,51 @@
 import psycopg2 as dbapi2
-from classes.team import Team
-from classes.court import Court
-from classes.country import Country
+from classes.hand import Hand
 from classes.model_config import dsn, connection
-class team_operations:
+class hand_operations:
     def __init__(self):
         self.last_key=None
 
-    def get_teams(self):
-        teams=[]
+    def get_hands(self):
         global connection
+        hand=[]
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT team.objectid, team.name, team.shirtcolour, team.foundationdate, team.countryid, country.name, team.courtid, court.name, court.address, court.capacity FROM team INNER JOIN court ON team.courtid = court.objectid INNER JOIN country ON team.countryid = country.objectid WHERE team.deleted = 0 AND court.deleted = 0 AND country.deleted = 0"""
+            statement = """SELECT objectid, name FROM hand WHERE deleted=0"""
             cursor.execute(statement)
-            teams = [(key, Team(key,name,color,date,countryid,Country(countryid, countryname, 0),courtid,Court(courtid, courtname,courtaddress,courtcapacity,0), 0)) for key, name, color, date, countryid, countryname, courtid, courtname, courtaddress, courtcapacity in cursor]
+            hands = [(key, Hand(key,name,0)) for key, name in cursor]
             cursor.close()
+        except dbapi2.DatabaseError:
+            if connection:
+                connection.rollback()
+        finally:
+            if connection: 
+                connection.close()
+        return hands
+
+    def add_hand(self,Hand):
+        global connection
+        try:
+            connection = dbapi2.connect(dsn)
+            cursor = connection.cursor()
+            cursor.execute("""INSERT INTO hand (name) VALUES (%s)""",(Hand.name,))
+            cursor.close()
+            connection.commit()
         except dbapi2.DatabaseError:
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
-        return teams
 
-    def add_team(self,Team):
+    def get_hand(self, key):
         global connection
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            cursor.execute("""INSERT INTO team (name, shirtcolour, foundationdate, countryid, courtid) VALUES (%s, %s, %s, %s, %s)""",(Team.name,Team.color,Team.date,Team.countryid,Team.courtid))
-            cursor.close()
-            connection.commit()
-        except dbapi2.DatabaseError:
-            if connection:
-                connection.close()
-        finally:
-            if connection:
-                connection.close()
-
-    def get_team(self, key):
-        global connection
-        try:
-            connection = dbapi2.connect(dsn)
-            cursor = connection.cursor()
-            statement = """SELECT objectid, name, shirtcolour, foundationdate, countryid, courtid FROM team where (objectid=%s and deleted=0)"""
+            statement = """SELECT objectid, name FROM hand where (objectid=%s and deleted=0)"""
             cursor.execute(statement, (key,))
-            id,name,color,date,countryid,courtid=cursor.fetchone()
+            id,name=cursor.fetchone()
             cursor.close()
         except dbapi2.DatabaseError:
             if connection:
@@ -55,15 +53,15 @@ class team_operations:
         finally:
             if connection:
                 connection.close()
-        return Team(None,name, color, date, countryid, None, courtid, None,0)
+        return Hand(None, name, 0)
 
-    def update_team(self, key, name, color, date, countryid, courtid):
+    def update_hand(self, key, name):
         global connection
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """update team set (name, shirtcolour, foundationdate, countryid, courtid) = (%s,%s,%s,%s,%s) where (objectid=(%s))"""
-            cursor.execute(statement, (name, color, date, countryid, courtid, key,))
+            statement = """update hand set (name) = (%s) where (objectid=(%s))"""
+            cursor.execute(statement, (name, key,))
             connection.commit()
             cursor.close()
         except dbapi2.DatabaseError:
@@ -73,12 +71,11 @@ class team_operations:
             if connection:
                 connection.close()
 
-    def delete_team(self,key):
-        global connection
+    def delete_hand(self,key):
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """update team set deleted = 1 where (objectid=(%s))"""
+            statement = """update hand set deleted = 1 where (objectid=(%s))"""
             cursor.execute(statement, (key,))
             connection.commit()
             cursor.close()
