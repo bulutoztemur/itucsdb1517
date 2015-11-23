@@ -16,6 +16,9 @@ from flask.helpers import url_for
 from classes.country import Country
 from classes.operations.country_operations import country_operations
 
+from classes.gender import Gender
+from classes.operations.gender_operations import gender_operations
+
 from classes.hand import Hand
 from classes.operations.hand_operations import hand_operations
 
@@ -192,7 +195,7 @@ def transfer_page(key=None,operation=None):
                 oldteamid = request.form['oldteamid']
                 newteamid = request.form['newteamid']
                 seasonid = request.form['seasonid']
-                transfer = Transfer(None,playerid, oldteamid, None, newteamid, None, seasonid, 0)
+                transfer = Transfer(None,playerid, oldteamid, None, newteamid, None, seasonid,None, 0)
                 store = transfer_operations()
                 result=store.add_transfer(transfer)
                 return redirect(url_for('admin.transfer_page'))
@@ -211,10 +214,12 @@ def transfer_page(key=None,operation=None):
 def transfer_edit_page(key=None):
     store = transfer_operations()
     storeTeam = team_operations()
+    storeSeason = season_operations()
     transfer = store.get_transfer(key) if key is not None else None
     teams = storeTeam.get_teams()
+    seasons = storeSeason.get_seasons()
     now = datetime.datetime.now()
-    return render_template('transfer_edit.html', transfer=transfer, teams=teams, current_time=now.ctime())
+    return render_template('transfer_edit.html', transfer=transfer, teams=teams,seasons=seasons, current_time=now.ctime())
 
 
 
@@ -337,3 +342,43 @@ def season_edit_page(key=None):
     season = store.get_season(key) if key is not None else None
     now = datetime.datetime.now()
     return render_template('season_edit.html', season=season, current_time=now.ctime())
+
+
+@admin.route('/gender', methods=['GET','POST'])
+def gender_page(key=None,operation=None):
+    if request.method == 'GET':
+        if request.args.get('operation') == 'delete':
+            store = gender_operations()
+            result=store.delete_gender(request.args.get('key'))
+            return redirect(url_for('admin.gender_page'))
+        else:
+            store = gender_operations()
+            genders=store.get_genders()
+            now = datetime.datetime.now()
+            return render_template('admin_genders.html', genders=genders, current_time=now.ctime())
+    else:
+        if request.form['submit']=='cancel':
+            return redirect(url_for('admin.gender_page'))
+
+        else:
+            if request.form['key_value']=='':
+                type = request.form['name']
+                gender = Gender(None,type, 0)
+                store = gender_operations()
+                result=store.add_gender(gender)
+                return redirect(url_for('admin.gender_page'))
+            else:
+                type = request.form['name']
+                key = request.form['key_value']
+                store = gender_operations()
+                result=store.update_gender(key, type)
+                return redirect(url_for('admin.gender_page'))
+
+
+@admin.route('/gender/add')
+@admin.route('/gender/<int:key>')
+def gender_edit_page(key=None):
+    store = gender_operations()
+    gender = store.get_gender(key) if key is not None else None
+    now = datetime.datetime.now()
+    return render_template('gender_edit.html', gender=gender, current_time=now.ctime())
