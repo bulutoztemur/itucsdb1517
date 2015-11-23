@@ -31,6 +31,9 @@ from classes.operations.transfer_operations import transfer_operations
 from classes.position import Position
 from classes.operations.position_operations import position_operations
 
+from classes.season import Season
+from classes.operations.season_operations import season_operations
+
 @admin.route('/')
 def admin_page():
     return render_template('admin.html')
@@ -292,3 +295,44 @@ def position_edit_page(key=None):
     position = store.get_position(key) if key is not None else None
     now = datetime.datetime.now()
     return render_template('position_edit.html', position=position, current_time=now.ctime())
+
+
+
+@admin.route('/season', methods=['GET','POST'])
+def season_page(key=None,operation=None):
+    if request.method == 'GET':
+        if request.args.get('operation') == 'delete':
+            store = season_operations()
+            result=store.delete_season(request.args.get('key'))
+            return redirect(url_for('admin.season_page'))
+        else:
+            store = season_operations()
+            seasons=store.get_seasons()
+            now = datetime.datetime.now()
+            return render_template('admin_seasons.html', seasons=seasons, current_time=now.ctime())
+    else:
+        if request.form['submit']=='cancel':
+            return redirect(url_for('admin.season_page'))
+
+        else:
+            if request.form['key_value']=='':
+                name = request.form['name']
+                season = Season(None,name, 0)
+                store = season_operations()
+                result=store.add_season(season)
+                return redirect(url_for('admin.season_page'))
+            else:
+                name = request.form['name']
+                key = request.form['key_value']
+                store = season_operations()
+                result=store.update_season(key, name)
+                return redirect(url_for('admin.season_page'))
+
+
+@admin.route('/season/add')
+@admin.route('/season/<int:key>')
+def season_edit_page(key=None):
+    store = season_operations()
+    season = store.get_season(key) if key is not None else None
+    now = datetime.datetime.now()
+    return render_template('season_edit.html', season=season, current_time=now.ctime())
