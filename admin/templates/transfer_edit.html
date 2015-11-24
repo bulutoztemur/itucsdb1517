@@ -20,9 +20,13 @@
                                   <form class="form-validate form-horizontal" id="feedback_form" method="post" action="{{ action }}">
                                   <input type="hidden" name="key_value" value="{{ key }}">
                                       <div class="form-group ">
-                                          <label class="control-label col-lg-2">Player ID <span class="required"></span></label>
-                                          <div class="col-lg-10">
-                                              <input class="form-control" type="text" name="playerid" value="{{ playerid }}"  />
+                                          <label class="control-label col-lg-2">Player</label>
+                                          <div class="col-md-2">
+                                             <select name="playerid" class="form-control m-bot15">
+												{% for key, player in players %}
+													<option value={{player.objectid}} {%if player.objectid==playerid %}selected{% endif %}>{{player.name+' '+player.surname}}</option>
+												{% endfor %}
+                                          	</select>
                                           </div>
                                       </div>
                                       <div class="form-group ">

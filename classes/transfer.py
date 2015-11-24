@@ -1,7 +1,8 @@
 class Transfer:
-    def __init__(self, objectid, playerid, oldteamid, oldteam, newteamid, newteam, seasonid,season, deleted):
+    def __init__(self, objectid, playerid, player, oldteamid, oldteam, newteamid, newteam, seasonid,season, deleted):
         self.objectid = objectid
         self.playerid = playerid
+        self.player = player
         self.oldteamid = oldteamid
         self.oldteam = oldteam
         self.newteamid = newteamid

@@ -46,6 +46,9 @@ from classes.operations.match_operations import match_operations
 from classes.player import Player
 from classes.operations.player_operations import player_operations
 
+from classes.statistic import Statistic
+from classes.operations.statistic_operations import statistic_operations
+
 @admin.route('/')
 def admin_page():
     return render_template('admin.html')
@@ -204,7 +207,7 @@ def transfer_page(key=None,operation=None):
                 oldteamid = request.form['oldteamid']
                 newteamid = request.form['newteamid']
                 seasonid = request.form['seasonid']
-                transfer = Transfer(None,playerid, oldteamid, None, newteamid, None, seasonid,None, 0)
+                transfer = Transfer(None,playerid, None, oldteamid, None, newteamid, None, seasonid,None, 0)
                 store = transfer_operations()
                 result=store.add_transfer(transfer)
                 return redirect(url_for('admin.transfer_page'))
@@ -224,11 +227,13 @@ def transfer_edit_page(key=None):
     store = transfer_operations()
     storeTeam = team_operations()
     storeSeason = season_operations()
+    storePlayer = player_operations()
     transfer = store.get_transfer(key) if key is not None else None
     teams = storeTeam.get_teams()
     seasons = storeSeason.get_seasons()
+    players = storePlayer.get_players()
     now = datetime.datetime.now()
-    return render_template('transfer_edit.html', transfer=transfer, teams=teams,seasons=seasons, current_time=now.ctime())
+    return render_template('transfer_edit.html', transfer=transfer, teams=teams,seasons=seasons,players=players, current_time=now.ctime())
 
 
 
@@ -568,3 +573,56 @@ def player_edit_page(key=None):
 
     now = datetime.datetime.now()
     return render_template('player_edit.html', player=player, teams=teams, countries=countries, genders=genders, positions=positions, hands=hands, current_time=now.ctime())
+
+
+@admin.route('/statistics', methods=['GET','POST'])
+def statistic_page(key=None,operation=None):
+    if request.method == 'GET':
+        if request.args.get('operation') == 'delete':
+            store = statistic_operations()
+            result=store.delete_statistic(request.args.get('key'))
+            return redirect(url_for('admin.statistic_page'))
+        else:
+            store = statistic_operations()
+            statistics=store.get_statistics()
+            now = datetime.datetime.now()
+            return render_template('admin_statistics.html', statistics=statistics, current_time=now.ctime())
+    else:
+        if request.form['submit']=='cancel':
+            return redirect(url_for('admin.statistic_page'))
+
+        else:
+            if request.form['key_value']=='':
+                assistnumber = request.form['assistnumber']
+                blocknumber = request.form['blocknumber']
+                score = request.form['score']
+                cardnumber = request.form['cardnumber']
+                seasonid = request.form['seasonid']
+                playerid = request.form['playerid']
+                statistic = Statistic(None, assistnumber, blocknumber, score, cardnumber, seasonid, None, playerid, None, 0)
+                store = statistic_operations()
+                result=store.add_statistic(statistic)
+                return redirect(url_for('admin.statistic_page'))
+            else:
+                key = request.form['key_value']
+                assistnumber = request.form['assistnumber']
+                blocknumber = request.form['blocknumber']
+                score = request.form['score']
+                cardnumber = request.form['cardnumber']
+                seasonid = request.form['seasonid']
+                playerid = request.form['playerid']
+                store = statistic_operations()
+                result=store.update_statistic(key,assistnumber,blocknumber,score,cardnumber,seasonid,playerid)
+                return redirect(url_for('admin.statistic_page'))
+
+@admin.route('/statistics/add')
+@admin.route('/statistics/<int:key>')
+def statistic_edit_page(key=None):
+    store = statistic_operations()
+    storeSeason = season_operations()
+    storePlayer = player_operations()
+    statistic = store.get_statistic(key) if key is not None else None
+    seasons = storeSeason.get_seasons()
+    players = storePlayer.get_players()
+    now = datetime.datetime.now()
+    return render_template('statistic_edit.html', statistic=statistic, seasons=seasons,players=players, current_time=now.ctime())

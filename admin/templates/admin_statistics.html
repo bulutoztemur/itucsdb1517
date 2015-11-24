@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{%block navigation%}
+	Admin / Statistic
+{%endblock%}
+
+{% block content %}
+<div class="row">
+<div class="col-lg-12">
+						<div style="padding:5px">
+                              	<a class="btn btn-success" href="{{ url_for('admin.statistic_edit_page') }}"><i class="icon_plus_alt2"></i> Add New Statistic </a>
+                              </div>
+				</div>
+</div>
+<div class="row">
+                  <div class="col-lg-12">
+                      <section class="panel">
+                          <header class="panel-heading">
+                              Statistics
+
+                          </header>
+
+                          <table class="table table-striped table-advance table-hover">
+                           <tbody>
+                              <tr>
+                                 <th>Assist Number</th>
+                                 <th>Block Number </th>
+                                 <th>Score</th>
+                                 <th>Card Number</th>
+                                 <th>Season</th>
+                                 <th>Player</th>
+                                 <th> Action</th>
+                              </tr>
+                              {% for key, statistic in statistics %}
+                              <tr>
+                                 <td>{{statistic.assistnumber}}</td>
+                                 <td>{{statistic.blocknumber}}</td>
+                                 <td>{{statistic.score}}</td>
+                                 <td>{{statistic.cardnumber}}</td>
+                                 <td>{{statistic.season.name}}</td>
+                                 <td>{{statistic.player.name}}</td>
+                                 <td>
+                                  <div class="btn-group">
+                                      <a class="btn btn-default" href="{{ url_for('admin.statistic_edit_page',key=key) }}">Update</a>
+                                      	<a class="btn btn-danger" name="submit" href="{{ url_for('admin.statistic_page',key=key, operation="delete") }}" value="delete" onclick="return confirm('Are you sure you want to delete this item?');" type="submit"><i class="icon_close_alt2"></i></a>
+
+                                  </div>
+                                  </td>
+                              </tr>
+							{% endfor %}
+                           </tbody>
+                        </table>
+                      </section>
+                  </div>
+              </div>
+
+{% endblock %}
