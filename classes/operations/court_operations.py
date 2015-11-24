@@ -53,7 +53,7 @@ class court_operations:
         finally:
             if connection:
                 connection.close()
-        return Court(None, name, address, capacity, 0)
+        return Court(id, name, address, capacity, 0)
 
     def update_court(self, key, name, address, capacity):
         global connection

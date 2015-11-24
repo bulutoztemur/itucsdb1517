@@ -411,7 +411,9 @@ def coach_page(key=None,operation=None):
                 surname = request.form['surname']
                 countryid = request.form['countryid']
                 teamid = request.form['teamid']
-                coach = Coach(None,name, surname, countryid, teamid, None, 0)
+                birthyear = request.form['birthyear']
+                genderid = request.form['genderid']
+                coach = Coach(None,name, surname, countryid, None, teamid, None, birthyear, genderid, None, 0)
                 store = coach_operations()
                 result=store.add_coach(coach)
                 return redirect(url_for('admin.coach_page'))
@@ -421,8 +423,10 @@ def coach_page(key=None,operation=None):
                 key = request.form['key_value']
                 countryid = request.form['countryid']
                 teamid = request.form['teamid']
+                birthyear = request.form['birthyear']
+                genderid = request.form['genderid']
                 store = coach_operations()
-                result=store.update_coach(key,name,surname,countryid,teamid)
+                result=store.update_coach(key,name,surname,countryid,teamid, birthyear, genderid)
                 return redirect(url_for('admin.coach_page'))
 
 @admin.route('/coaches/add')
@@ -431,8 +435,10 @@ def coach_edit_page(key=None):
     store = coach_operations()
     storeTeam = team_operations()
     storeCountry = country_operations()
+    storeGenders = gender_operations()
     coach = store.get_coach(key) if key is not None else None
     teams = storeTeam.get_teams()
     countries = storeCountry.get_countries()
+    genders = storeGenders.get_genders()
     now = datetime.datetime.now()
-    return render_template('coach_edit.html', coach=coach, teams=teams, countries=countries, current_time=now.ctime())
+    return render_template('coach_edit.html', coach=coach, teams=teams, countries=countries, genders=genders, current_time=now.ctime())

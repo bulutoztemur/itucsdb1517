@@ -53,7 +53,7 @@ class country_operations:
         finally:
             if connection:
                 connection.close()
-        return Country(None, name, 0)
+        return Country(id, name, 0)
 
     def update_country(self, key, name):
         global connection

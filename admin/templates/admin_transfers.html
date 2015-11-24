@@ -25,15 +25,15 @@
                                  <th>Player ID</th>
                                  <th>Old Team </th>
                                  <th>New Team </th>
-                                 <th>Season ID</th>
+                                 <th>Season Name</th>
                                  <th> Action</th>
                               </tr>
                               {% for key, transfer in transfers %}
                               <tr>
                                  <td>{{transfer.playerid}}</td>
-                                 <td>{{transfer.team.name}}</td>
-                                 <td>{{transfer.team.name}}</td>
-                                 <td>{{transfer.seasonid}}</td>
+                                 <td>{{transfer.oldteam.name}}</td>
+                                 <td>{{transfer.newteam.name}}</td>
+                                 <td>{{transfer.season.name}}</td>
                                  <td>
                                   <div class="btn-group">
                                       <a class="btn btn-default" href="{{ url_for('admin.transfer_edit_page',key=key) }}">Update</a>

@@ -1,21 +1,28 @@
 import psycopg2 as dbapi2
 from classes.coach import Coach
 from classes.team import Team
+from classes.operations.team_operations import team_operations
 from classes.country import Country
+from classes.operations.country_operations import country_operations
+from classes.gender import Gender
+from classes.operations.gender_operations import gender_operations
 from classes.model_config import dsn, connection
 class coach_operations:
     def __init__(self):
         self.last_key=None
 
-    def get_coachs(self):
+    def get_coaches(self):
         coachs=[]
         global connection
+        storeCountry = country_operations()
+        storeTeam = team_operations()
+        storeGender = gender_operations()
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT coach.objectid, coach.name, coach.surname, coach.countryid, country.name, coach.teamid, team.name, coach.birthyear, coach.genderid FROM coach INNER JOIN court ON team.courtid = court.objectid INNER JOIN country ON team.countryid = country.objectid WHERE team.deleted = 0 AND court.deleted = 0 AND country.deleted = 0"""
+            statement = """SELECT coach.objectid, coach.name, coach.surname, coach.countryid, coach.teamid, coach.birthday, coach.genderid FROM coach WHERE coach.deleted = 0"""
             cursor.execute(statement)
-            coachs = [(key, Coach(key,name,surname,countryid,Country(countryid, countryname, 0),teamid,Team(teamid,teamname, color), 0)) for key, name,surname, countryid, countryname, teamid, teamname, teamcolor in cursor]
+            coachs = [(key, Coach(key,name,surname,countryid, storeCountry.get_country(countryid), teamid, storeTeam.get_team(teamid), birthyear, genderid, storeGender.get_gender(genderid), 0)) for key, name,surname, countryid, teamid, birthyear, genderid in cursor]
             cursor.close()
         except dbapi2.DatabaseError:
             if connection:
@@ -30,7 +37,7 @@ class coach_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            cursor.execute("""INSERT INTO coach (name, surname, countryid, teamid) VALUES (%s, %s, %s, %s)""",(Coach.name,Coach.surname,Coach.countryid,Coach.teamid))
+            cursor.execute("""INSERT INTO coach (name, surname, countryid, teamid, birthday, genderid) VALUES (%s, %s, %s, %s, %s, %s)""",(Coach.name,Coach.surname,Coach.countryid,Coach.teamid, Coach.birthyear, Coach.genderid))
             cursor.close()
             connection.commit()
         except dbapi2.DatabaseError:
@@ -39,13 +46,15 @@ class coach_operations:
         finally:
             if connection:
                 connection.close()
-
-    def get_team(self, key):
+    def get_coach(self, key):
         global connection
+        storeCountry = country_operations()
+        storeTeam = team_operations()
+        storeGender = gender_operations()
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT objectid, name, surname,  countryid, teamid, birthyear, genderid FROM coach where (objectid=%s and deleted=0)"""
+            statement = """SELECT objectid, name, surname,  countryid, teamid, birthday, genderid FROM coach where (objectid=%s and deleted=0)"""
             cursor.execute(statement, (key,))
             id,name,surname,countryid,teamid,birthyear,genderid=cursor.fetchone()
             cursor.close()
@@ -55,14 +64,15 @@ class coach_operations:
         finally:
             if connection:
                 connection.close()
-        return Coach(None,name,surname,countryid,teamid,birthyear,genderid,0)
+
+        return Coach(id,name,surname,countryid, storeCountry.get_country(countryid), teamid, storeTeam.get_team(teamid), birthyear, genderid, storeGender.get_gender(genderid), 0)
 
     def update_coach(self, key, name, surname, countryid, teamid, birthyear, genderid):
         global connection
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """update coach set (name, surname, countryid, teamid, birthyear, genderid) = (%s,%s,%s,%s,%s, %s) where (objectid=(%s))"""
+            statement = """update coach set (name, surname, countryid, teamid, birthday, genderid) = (%s,%s,%s,%s,%s, %s) where (objectid=(%s))"""
             cursor.execute(statement, (name, surname, countryid, teamid, birthyear, genderid, key,))
             connection.commit()
             cursor.close()

@@ -22,16 +22,21 @@
                           <table class="table table-striped table-advance table-hover">
                            <tbody>
                               <tr>
-                                 <th> Coach</th>
-                                 <th> Action</th>
+                                 <th> Name</th>
+                                 <th> Surname</th>
+                                 <th> Birthyear</th>
+                                 <th> Team</th>
+                                 <th> County</th>
+                                 <th> Gender</th>
                               </tr>
                               {% for key, coach in coaches %}
                               <tr>
                                  <td>{{coach.name}}</td>
                                  <td>{{coach.surname}}</td>
-                                 <td>{{coach.teamid}}</td>
-                                 <td>{{coach.countryid}}</td>
-                                 
+                                 <td>{{coach.birthyear}}</td>
+                                 <td>{{coach.team.name}}</td>
+                                 <td>{{coach.country.name}}</td>
+                                 <td>{{coach.gender.type}}</td>
                                  <td>
                                   <div class="btn-group">
                                       <a class="btn btn-default" href="{{ url_for('admin.coach_edit_page',key=key) }}">Update</a>

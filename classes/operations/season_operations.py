@@ -53,7 +53,7 @@ class season_operations:
         finally:
             if connection:
                 connection.close()
-        return Season(None, name, 0)
+        return Season(id, name, 0)
 
     def update_season(self, key, name):
         global connection

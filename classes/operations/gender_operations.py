@@ -53,7 +53,7 @@ class gender_operations:
         finally:
             if connection:
                 connection.close()
-        return Gender(None, type, 0)
+        return Gender(id, type, 0)
 
     def update_gender(self, key, type):
         global connection

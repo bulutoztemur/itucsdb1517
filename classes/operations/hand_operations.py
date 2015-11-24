@@ -53,7 +53,7 @@ class hand_operations:
         finally:
             if connection:
                 connection.close()
-        return Hand(None, name, 0)
+        return Hand(id, name, 0)
 
     def update_hand(self, key, name):
         global connection

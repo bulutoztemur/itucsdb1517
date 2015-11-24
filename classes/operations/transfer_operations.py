@@ -1,6 +1,8 @@
 import psycopg2 as dbapi2
 from classes.transfer import Transfer
 from classes.team import Team
+from classes.operations.team_operations import team_operations
+from classes.operations.season_operations import season_operations
 from classes.model_config import dsn, connection
 class transfer_operations:
     def __init__(self):
@@ -8,13 +10,15 @@ class transfer_operations:
 
     def get_transfers(self):
         global connection
+        storeTeam = team_operations()
+        storeSeason = season_operations()
         transfers=[]
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT transfer.objectid, transfer.playerid, transfer.oldteamid, team.name, transfer.newteamid, team.name, transfer.seasonid FROM transfer INNER JOIN team ON transfer.oldteamid=team.objectid INNER JOIN team ON transfer.newteamid=team.objectid where transfer.deleted=0"""
+            statement = """SELECT transfer.objectid, transfer.playerid, transfer.oldteamid, transfer.newteamid, transfer.seasonid FROM transfer where transfer.deleted=0"""
             cursor.execute(statement)
-            transfers = [(key, Transfer(key, playerid, oldteamid,Team(oldteamid, name, color, date, countryid, country, courtid, court, 0), newteamid,Team(newteamid, name, color, date, countryid, country, courtid, court, 0), seasonid, 0)) for key, playerid, oldteamid, teamname, newteamid, teamname2, seasonid in cursor]
+            transfers = [(key, Transfer(key, playerid, oldteamid,storeTeam.get_team(oldteamid), newteamid, storeTeam.get_team(newteamid), seasonid, storeSeason.get_season(seasonid), 0)) for key, playerid, oldteamid, newteamid, seasonid in cursor]
             cursor.close()
         except dbapi2.DatabaseError:
             if connection:
@@ -22,6 +26,7 @@ class transfer_operations:
         finally:
             if connection:
                 connection.close()
+
         return transfers
 
     def add_transfer(self,Transfer):
@@ -41,6 +46,8 @@ class transfer_operations:
 
     def get_transfer(self, key):
         global connection
+        storeTeam = team_operations()
+        storeSeason = season_operations()
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
@@ -54,7 +61,7 @@ class transfer_operations:
         finally:
             if connection:
                 connection.close()
-        return Transfer(playerid, oldteamid, newteamid, seasonid, 0)
+        return Transfer(id, playerid, oldteamid, storeTeam.get_team(oldteamid), newteamid, storeTeam.get_team(newteamid), seasonid, storeSeason.get_season(seasonid), 0)
 
     def update_transfer(self, key, playerid, oldteamid, newteamid, seasonid):
         global connection
