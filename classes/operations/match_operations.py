@@ -66,19 +66,19 @@ class match_operations:
 
     def update_match(self, key, hometeamid, awayteamid, courtid, matchdate):
         global connection
-#         try:
-#             connection = dbapi2.connect(dsn)
-#             cursor = connection.cursor()
-#             statement = """update match set (hometeamid, awayteamid, courtid, matchdate) = (%s,%s,%s,%s) where (objectid=(%s))"""
-#             cursor.execute(statement, (hometeamid, awayteamid, courtid, matchdate, key,))
-#             connection.commit()
-#             cursor.close()
-#         except dbapi2.DatabaseError:
-#             if connection:
-#                 connection.rollback()
-#         finally:
-#             if connection:
-#                 connection.close()
+        try:
+            connection = dbapi2.connect(dsn)
+            cursor = connection.cursor()
+            statement = """update match set (hometeamid, awayteamid, courtid, matchdate) = (%s,%s,%s,%s) where (objectid=(%s))"""
+            cursor.execute(statement, (hometeamid, awayteamid, courtid, matchdate, key,))
+            connection.commit()
+            cursor.close()
+        except dbapi2.DatabaseError:
+            if connection:
+                connection.rollback()
+        finally:
+            if connection:
+                connection.close()
         connection = dbapi2.connect(dsn)
         cursor = connection.cursor()
         statement = """update match set (hometeamid, awayteamid, courtid, matchdate) = (%s,%s,%s,%s) where (objectid=(%s))"""
