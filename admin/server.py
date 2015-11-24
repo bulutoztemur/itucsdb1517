@@ -40,6 +40,9 @@ from classes.operations.season_operations import season_operations
 from classes.coach import Coach
 from classes.operations.coach_operations import coach_operations
 
+from classes.match import Match
+from classes.operations.match_operations import match_operations
+
 
 
 @admin.route('/')
@@ -442,3 +445,52 @@ def coach_edit_page(key=None):
     genders = storeGenders.get_genders()
     now = datetime.datetime.now()
     return render_template('coach_edit.html', coach=coach, teams=teams, countries=countries, genders=genders, current_time=now.ctime())
+
+@admin.route('/matches', methods=['GET','POST'])
+def match_page(key=None,operation=None):
+    if request.method == 'GET':
+        if request.args.get('operation') == 'delete':
+            store = match_operations()
+            result=store.delete_match(request.args.get('key'))
+            return redirect(url_for('admin.match_page'))
+        else:
+            store = match_operations()
+            matches=store.get_matches()
+            now = datetime.datetime.now()
+            return render_template('admin_matches.html', matches=matches, current_time=now.ctime())
+    else:
+        if request.form['submit']=='cancel':
+            return redirect(url_for('admin.match_page'))
+
+        else:
+            if request.form['key_value']=='':
+                hometeamid = request.form['hometeamid']
+                awayteamid = request.form['awayteamid']
+                courtid = request.form['courtid']
+                matchdate = request.form['matchdate']
+                match = Match(None,hometeamid, None, awayteamid, None, courtid, None, matchdate, 0)
+                store = match_operations()
+                result=store.add_match(match)
+                return redirect(url_for('admin.match_page'))
+            else:
+                hometeamid = request.form['hometeamid']
+                awayteamid = request.form['awayteamid']
+                courtid = request.form['courtid']
+                matchdate = request.form['matchdate']
+                store = match_operations()
+                result=store.update_match(key,hometeamid,awayteamid,courtid,matchdate)
+                return redirect(url_for('admin.match_page'))
+
+@admin.route('/matches/add')
+@admin.route('/matches/<int:key>')
+def match_edit_page(key=None):
+    store = match_operations()
+    storeTeam = team_operations()
+    storeCourt = court_operations()
+
+    match = store.get_match(key) if key is not None else None
+    teams = storeTeam.get_teams()
+    courts = storeCourt.get_courts()
+
+    now = datetime.datetime.now()
+    return render_template('match_edit.html', match=match, teams=teams, courts=courts, current_time=now.ctime())

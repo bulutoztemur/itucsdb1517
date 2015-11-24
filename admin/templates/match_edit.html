@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block title %}Match Edit Form{% endblock %}
+{% block content %}
+{% set key = request.path.split('/')[-1] if match else '' %}
+{% set action = url_for('admin.match_page') if match else url_for('admin.match_page') %}
+{% set hometeamid = match.hometeamid if match else '' %}
+{% set awayteamid = match.awayteamid if match else '' %}
+{% set courtid = match.courtid if match else '' %}
+{% set matchdate = match.matchdate if match else '' %}
+
+<!-- Form validations -->
+              <div class="row">
+                  <div class="col-lg-12">
+                      <section class="panel">
+                          <header class="panel-heading">
+                              Edit match Panel
+                          </header>
+                          <div class="panel-body">
+                              <div class="form">
+                                  <form class="form-validate form-horizontal" id="feedback_form" method="post" action="{{ action }}">
+                                  <input type="hidden" name="key_value" value="{{ key }}">
+
+                                    <div class="form-group ">
+                                          <label class="control-label col-lg-2">HomeTeam</label>
+                                          <div class="col-md-2">
+                                             <select name="hometeamid" class="form-control m-bot15">
+												{% for key, team in teams %}
+													<option value={{team.objectid}} {%if team.objectid==hometeamid %}selected{% endif %}>{{team.name}}</option>
+												{% endfor %}
+                                          	</select>
+                                          </div>
+                                      </div>
+
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">AwayTeam</label>
+                                          <div class="col-md-2">
+                                             <select name="awayteamid" class="form-control m-bot15">
+												{% for key, team in teams %}
+													<option value={{team.objectid}} {%if team.objectid==awayteamid %}selected{% endif %}>{{team.name}}</option>
+												{% endfor %}
+                                          	</select>
+                                          </div>
+                                      </div>
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Court</label>
+                                          <div class="col-md-2">
+                                             <select name="courtid" class="form-control m-bot15">
+												{% for key, court in courts %}
+													<option value={{court.objectid}} {%if court.objectid==courtid %}selected{% endif %}>{{court.name}}</option>
+												{% endfor %}
+                                          	</select>
+                                          </div>
+                                      </div>
+										<div class="form-group ">
+                                          <label class="control-label col-lg-2">MatchDate <span class="required"></span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control "  type="text" name="matchdate" value="{{ matchdate }}"  />
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                          <div class="col-lg-offset-2 col-lg-10">
+                                              <button class="btn btn-primary" value="save" name="submit" type="submit">Save</button>
+                                              <button class="btn btn-default" value="cancel" name="submit" type="submit" >Cancel</button>
+                                          </div>
+                                      </div>
+                                  </form>
+                              </div>
+
+                          </div>
+                      </section>
+                  </div>
+              </div>
+{% endblock %}
