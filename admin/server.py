@@ -37,6 +37,11 @@ from classes.operations.position_operations import position_operations
 from classes.season import Season
 from classes.operations.season_operations import season_operations
 
+from classes.coach import Coach
+from classes.operations.coach_operations import coach_operations
+
+
+
 @admin.route('/')
 def admin_page():
     return render_template('admin.html')
@@ -382,3 +387,52 @@ def gender_edit_page(key=None):
     gender = store.get_gender(key) if key is not None else None
     now = datetime.datetime.now()
     return render_template('gender_edit.html', gender=gender, current_time=now.ctime())
+
+
+@admin.route('/coaches', methods=['GET','POST'])
+def coach_page(key=None,operation=None):
+    if request.method == 'GET':
+        if request.args.get('operation') == 'delete':
+            store = coach_operations()
+            result=store.delete_coach(request.args.get('key'))
+            return redirect(url_for('admin.coach_page'))
+        else:
+            store = coach_operations()
+            coaches=store.get_coaches()
+            now = datetime.datetime.now()
+            return render_template('admin_coaches.html', coaches=coaches, current_time=now.ctime())
+    else:
+        if request.form['submit']=='cancel':
+            return redirect(url_for('admin.coach_page'))
+
+        else:
+            if request.form['key_value']=='':
+                name = request.form['name']
+                surname = request.form['surname']
+                countryid = request.form['countryid']
+                teamid = request.form['teamid']
+                coach = Coach(None,name, surname, countryid, teamid, None, 0)
+                store = coach_operations()
+                result=store.add_coach(coach)
+                return redirect(url_for('admin.coach_page'))
+            else:
+                name = request.form['name']
+                surname = request.form['surname']
+                key = request.form['key_value']
+                countryid = request.form['countryid']
+                teamid = request.form['teamid']
+                store = coach_operations()
+                result=store.update_coach(key,name,surname,countryid,teamid)
+                return redirect(url_for('admin.coach_page'))
+
+@admin.route('/coaches/add')
+@admin.route('/coaches/<int:key>')
+def coach_edit_page(key=None):
+    store = coach_operations()
+    storeTeam = team_operations()
+    storeCountry = country_operations()
+    coach = store.get_coach(key) if key is not None else None
+    teams = storeTeam.get_teams()
+    countries = storeCountry.get_countries()
+    now = datetime.datetime.now()
+    return render_template('coach_edit.html', coach=coach, teams=teams, countries=countries, current_time=now.ctime())
