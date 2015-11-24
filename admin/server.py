@@ -477,6 +477,7 @@ def match_page(key=None,operation=None):
                 awayteamid = request.form['awayteamid']
                 courtid = request.form['courtid']
                 matchdate = request.form['matchdate']
+                key = request.form['key_value']
                 store = match_operations()
                 result=store.update_match(key,hometeamid,awayteamid,courtid,matchdate)
                 return redirect(url_for('admin.match_page'))
