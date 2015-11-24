@@ -53,7 +53,7 @@ class position_operations:
         finally:
             if connection:
                 connection.close()
-        return Position(id, name,0)
+        return Position(id, name, 0)
 
     def update_position(self, key, name):
         global connection

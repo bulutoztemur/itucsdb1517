@@ -43,7 +43,8 @@ from classes.operations.coach_operations import coach_operations
 from classes.match import Match
 from classes.operations.match_operations import match_operations
 
-
+from classes.player import Player
+from classes.operations.player_operations import player_operations
 
 @admin.route('/')
 def admin_page():
@@ -495,3 +496,75 @@ def match_edit_page(key=None):
 
     now = datetime.datetime.now()
     return render_template('match_edit.html', match=match, teams=teams, courts=courts, current_time=now.ctime())
+
+@admin.route('/players', methods=['GET','POST'])
+def player_page(key=None,operation=None):
+    if request.method == 'GET':
+        if request.args.get('operation') == 'delete':
+            store = player_operations()
+            result=store.delete_player(request.args.get('key'))
+            return redirect(url_for('admin.player_page'))
+        else:
+            store = player_operations()
+            players=store.get_players()
+            now = datetime.datetime.now()
+            return render_template('admin_players.html', players=players, current_time=now.ctime())
+    else:
+        if request.form['submit']=='cancel':
+            return redirect(url_for('admin.player_page'))
+
+        else:
+            if request.form['key_value']=='':
+                name = request.form['name']
+                surname = request.form['surname']
+                birthdate = request.form['birthdate']
+                height = request.form['height']
+                weight = request.form['weight']
+                startdate = request.form['startdate']
+                teamid = request.form['teamid']
+                countryid = request.form['countryid']
+                genderid = request.form['genderid']
+                positionid = request.form['positionid']
+                handid = request.form['handid']
+                number = request.form['number']
+                player = Player(None, name, surname, birthdate, height, weight, startdate, teamid, None, countryid, None, genderid, None, positionid, None, handid, None, number, 0)
+                store = player_operations()
+                result=store.add_player(player)
+                return redirect(url_for('admin.player_page'))
+            else:
+                name = request.form['name']
+                surname = request.form['surname']
+                birthdate = request.form['birthdate']
+                height = request.form['height']
+                weight = request.form['weight']
+                startdate = request.form['startdate']
+                teamid = request.form['teamid']
+                countryid = request.form['countryid']
+                genderid = request.form['genderid']
+                positionid = request.form['positionid']
+                handid = request.form['handid']
+                number = request.form['number']
+                key = request.form['key_value']
+                store = player_operations()
+                result=store.update_player(key,name, surname, birthdate, height, weight, startdate, teamid, countryid, genderid, positionid, handid, number)
+                return redirect(url_for('admin.player_page'))
+
+@admin.route('/players/add')
+@admin.route('/players/<int:key>')
+def player_edit_page(key=None):
+    store = player_operations()
+    storeCountry = country_operations()
+    storeTeam = team_operations()
+    storeGender = gender_operations()
+    storePosition = position_operations()
+    storeHand = hand_operations()
+
+    player = store.get_player(key) if key is not None else None
+    teams = storeTeam.get_teams()
+    countries = storeCountry.get_countries()
+    genders = storeGender.get_genders()
+    positions = storePosition.get_positions()
+    hands = storeHand.get_hands()
+
+    now = datetime.datetime.now()
+    return render_template('player_edit.html', player=player, teams=teams, countries=countries, genders=genders, positions=positions, hands=hands, current_time=now.ctime())

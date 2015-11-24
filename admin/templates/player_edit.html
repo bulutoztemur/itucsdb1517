@@ -1,0 +1,150 @@
+{% extends "layout.html" %}
+{% block title %}Player Edit Form{% endblock %}
+{% block content %}
+{% set key = request.path.split('/')[-1] if player else '' %}
+{% set action = url_for('admin.player_page') if player else url_for('admin.player_page') %}
+{% set name = player.name if player else '' %}
+{% set surname = player.surname if player else '' %}
+{% set birthdate = player.birthdate if player else '' %}
+{% set height = player.height if player else '' %}
+{% set weight = player.weight if player else '' %}
+{% set startdate = player.startdate if player else '' %}
+{% set teamid = player.teamid if player else '' %}
+{% set countryid = player.countryid if player else '' %}
+{% set genderid = player.genderid if player else '' %}
+{% set positionid = player.positionid if player else '' %}
+{% set handid = player.handid if player else '' %}
+{% set number = player.number if player else '' %}
+
+<!-- Form validations -->
+              <div class="row">
+                  <div class="col-lg-12">
+                      <section class="panel">
+                          <header class="panel-heading">
+                              Edit player Panel
+                          </header>
+                          <div class="panel-body">
+                              <div class="form">
+                                  <form class="form-validate form-horizontal" id="feedback_form" method="post" action="{{ action }}">
+                                  <input type="hidden" name="key_value" value="{{ key }}">
+
+                                    <div class="form-group ">
+                                          <label class="control-label col-lg-2">Name <span class="required"></span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control"  name="name" value="{{ name }}" type="text" />
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Surname <span class="required"></span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control "  type="text" name="surname" value="{{ surname }}"  />
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Date of Birth <span class="required"></span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control "  type="text" name="birthdate" value="{{ birthdate }}"  />
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Height <span class="required"></span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control "  type="text" name="height" value="{{ height }}"  />
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Weight <span class="required"></span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control "  type="text" name="weight" value="{{ weight }}"  />
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Start Date <span class="required"></span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control "  type="text" name="startdate" value="{{ startdate }}"  />
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Team </label>
+                                          <div class="col-md-2">
+                                             <select name="teamid" class="form-control m-bot15">
+												{% for key, team in teams %}
+													<option value={{team.objectid}} {%if team.objectid==teamid %}selected{% endif %}>{{team.name}}</option>
+												{% endfor %}
+                                          	</select>
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Country </label>
+                                          <div class="col-md-2">
+                                             <select name="countryid" class="form-control m-bot15">
+												{% for key, country in countries %}
+													<option value={{country.objectid}} {%if country.objectid==countryid %}selected{% endif %}>{{country.name}}</option>
+												{% endfor %}
+                                          	</select>
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Gender </label>
+                                          <div class="col-md-2">
+                                             <select name="genderid" class="form-control m-bot15">
+												{% for key, gender in genders %}
+													<option value={{gender.objectid}} {%if gender.objectid==genderid %}selected{% endif %}>{{gender.type}}</option>
+												{% endfor %}
+                                          	</select>
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Position </label>
+                                          <div class="col-md-2">
+                                             <select name="positionid" class="form-control m-bot15">
+												{% for key, position in positions %}
+													<option value={{position.objectid}} {%if position.objectid==positionid %}selected{% endif %}>{{position.name}}</option>
+												{% endfor %}
+                                          	</select>
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Hand </label>
+                                          <div class="col-md-2">
+                                             <select name="handid" class="form-control m-bot15">
+												{% for key, hand in hands %}
+													<option value={{hand.objectid}} {%if hand.objectid==handid %}selected{% endif %}>{{hand.name}}</option>
+												{% endfor %}
+                                          	</select>
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Number <span class="required"></span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control "  type="text" name="number" value="{{ number }}"  />
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                          <div class="col-lg-offset-2 col-lg-10">
+                                              <button class="btn btn-primary" value="save" name="submit" type="submit">Save</button>
+                                              <button class="btn btn-default" value="cancel" name="submit" type="submit" >Cancel</button>
+                                          </div>
+                                      </div>
+
+
+                                  </form>
+                              </div>
+
+                          </div>
+                      </section>
+                  </div>
+              </div>
+{% endblock %}

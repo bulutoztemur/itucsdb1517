@@ -79,13 +79,6 @@ class match_operations:
         finally:
             if connection:
                 connection.close()
-        connection = dbapi2.connect(dsn)
-        cursor = connection.cursor()
-        statement = """update match set (hometeamid, awayteamid, courtid, matchdate) = (%s,%s,%s,%s) where (objectid=(%s))"""
-        cursor.execute(statement, (hometeamid, awayteamid, courtid, matchdate, key,))
-        connection.commit()
-        cursor.close()
-        connection.close()
 
     def delete_match(self,key):
         global connection
