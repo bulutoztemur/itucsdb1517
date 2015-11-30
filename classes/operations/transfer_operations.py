@@ -19,7 +19,7 @@ class transfer_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT transfer.objectid, transfer.playerid, transfer.oldteamid, transfer.newteamid, transfer.seasonid FROM transfer where transfer.deleted=0"""
+            statement = """SELECT transfer.objectid, transfer.playerid, transfer.oldteamid, transfer.newteamid, transfer.seasonid FROM transfer where transfer.deleted=0 ORDER BY objectid"""
             cursor.execute(statement)
             transfers = [(key, Transfer(key, playerid,storePlayer.get_player(playerid), oldteamid,storeTeam.get_team(oldteamid), newteamid, storeTeam.get_team(newteamid), seasonid, storeSeason.get_season(seasonid), 0)) for key, playerid, oldteamid, newteamid, seasonid in cursor]
             cursor.close()
@@ -40,17 +40,25 @@ class transfer_operations:
             cursor.execute("""INSERT INTO transfer (playerid, oldteamid, newteamid, seasonid) VALUES (%s, %s, %s, %s)""",(Transfer.playerid,Transfer.oldteamid,Transfer.newteamid,Transfer.seasonid))
             cursor.close()
             connection.commit()
-        except dbapi2.DatabaseError:
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
             if connection:
-                connection.close()
+                connection.rollback()
+        except dbapi2.DatabaseError:
+            result = 'databaseerror'
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def get_transfer(self, key):
         global connection
         storeTeam = team_operations()
         storeSeason = season_operations()
+        storePlayer = player_operations()
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
@@ -75,24 +83,39 @@ class transfer_operations:
             cursor.execute(statement, (playerid, oldteamid, newteamid, seasonid, key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def delete_transfer(self,key):
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """update transfer set deleted = 1 where (objectid=(%s))"""
+#             statement = """update transfer set deleted = 1 where (objectid=(%s))"""
+            statement = """delete from transfer where (objectid=(%s))"""
             cursor.execute(statement, (key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result

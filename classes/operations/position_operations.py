@@ -11,7 +11,7 @@ class position_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT objectid, name FROM position WHERE position.deleted = 0"""
+            statement = """SELECT objectid, name FROM position WHERE position.deleted = 0 ORDER BY objectid"""
             cursor.execute(statement)
             positions = [(key, Position(key,name,0)) for key, name in cursor]
             cursor.close()
@@ -31,12 +31,19 @@ class position_operations:
             cursor.execute("""INSERT INTO position (name) VALUES (%s)""",(Position.name,))
             cursor.close()
             connection.commit()
-        except dbapi2.DatabaseError:
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
             if connection:
-                connection.close()
+                connection.rollback()
+        except dbapi2.DatabaseError:
+            result = 'databaseerror'
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def get_position(self, key):
         global connection
@@ -64,25 +71,40 @@ class position_operations:
             cursor.execute(statement, (name, key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def delete_position(self,key):
         global connection
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """update position set deleted = 1 where (objectid=(%s))"""
+#             statement = """update position set deleted = 1 where (objectid=(%s))"""
+            statement = """delete from position where (objectid=(%s))"""
             cursor.execute(statement, (key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result

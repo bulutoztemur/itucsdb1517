@@ -13,6 +13,8 @@ from flask import redirect
 from flask import request
 from flask.helpers import url_for
 
+from classes.operations.database_init import database_initialization
+
 from classes.country import Country
 from classes.operations.country_operations import country_operations
 
@@ -49,22 +51,29 @@ from classes.operations.player_operations import player_operations
 from classes.statistic import Statistic
 from classes.operations.statistic_operations import statistic_operations
 
+@admin.route('/init')
+def init_db():
+    store = database_initialization()
+    store.init_db()
+    return render_template('admin.html')
+
 @admin.route('/')
 def admin_page():
     return render_template('admin.html')
 
 @admin.route('/country', methods=['GET','POST'])
-def country_page(key=None,operation=None):
+def country_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
             store = country_operations()
             result=store.delete_country(request.args.get('key'))
-            return redirect(url_for('admin.country_page'))
+            return redirect(url_for('admin.country_page', error=result))
         else:
             store = country_operations()
             countries=store.get_countries()
             now = datetime.datetime.now()
-            return render_template('admin_countries.html', countries=countries, current_time=now.ctime())
+            error = request.args.get('error')
+            return render_template('admin_countries.html', countries=countries, error=error, current_time=now.ctime())
     else:
         if request.form['submit']=='cancel':
             return redirect(url_for('admin.country_page'))
@@ -75,13 +84,13 @@ def country_page(key=None,operation=None):
                 country = Country(None,name, 0)
                 store = country_operations()
                 result=store.add_country(country)
-                return redirect(url_for('admin.country_page'))
+                return redirect(url_for('admin.country_page', error=result))
             else:
                 name = request.form['name']
                 key = request.form['key_value']
                 store = country_operations()
                 result=store.update_country(key, name)
-                return redirect(url_for('admin.country_page'))
+                return redirect(url_for('admin.country_page', error=result))
 
 
 @admin.route('/country/add')
@@ -94,17 +103,18 @@ def country_edit_page(key=None):
 
 
 @admin.route('/teams', methods=['GET','POST'])
-def team_page(key=None,operation=None):
+def team_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
             store = team_operations()
             result=store.delete_team(request.args.get('key'))
-            return redirect(url_for('admin.team_page'))
+            return redirect(url_for('admin.team_page', error=result))
         else:
             store = team_operations()
             teams=store.get_teams()
             now = datetime.datetime.now()
-            return render_template('admin_teams.html', teams=teams, current_time=now.ctime())
+            error = request.args.get('error')
+            return render_template('admin_teams.html', teams=teams, error=error, current_time=now.ctime())
     else:
         if request.form['submit']=='cancel':
             return redirect(url_for('admin.team_page'))
@@ -119,7 +129,7 @@ def team_page(key=None,operation=None):
                 team = Team(None,name, color, date, countryid, None, courtid, None, 0)
                 store = team_operations()
                 result=store.add_team(team)
-                return redirect(url_for('admin.team_page'))
+                return redirect(url_for('admin.team_page', error=result))
             else:
                 name = request.form['name']
                 color = request.form['color']
@@ -129,7 +139,7 @@ def team_page(key=None,operation=None):
                 courtid = request.form['courtid']
                 store = team_operations()
                 result=store.update_team(key,name,color,date,countryid,courtid)
-                return redirect(url_for('admin.team_page'))
+                return redirect(url_for('admin.team_page', error=result))
 
 @admin.route('/teams/add')
 @admin.route('/teams/<int:key>')
@@ -144,17 +154,18 @@ def team_edit_page(key=None):
     return render_template('team_edit.html', team=team, courts=courts, countries=countries, current_time=now.ctime())
 
 @admin.route('/courts', methods=['GET','POST'])
-def court_page(key=None,operation=None):
+def court_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
             store = court_operations()
             result=store.delete_court(request.args.get('key'))
-            return redirect(url_for('admin.court_page'))
+            return redirect(url_for('admin.court_page', error=result))
         else:
             store = court_operations()
             courts=store.get_courts()
             now = datetime.datetime.now()
-            return render_template('admin_courts.html', courts=courts, current_time=now.ctime())
+            error = request.args.get('error')
+            return render_template('admin_courts.html', courts=courts, error=error, current_time=now.ctime())
     else:
         if request.form['submit']=='cancel':
             return redirect(url_for('admin.court_page'))
@@ -167,7 +178,7 @@ def court_page(key=None,operation=None):
                 court = Court(None ,name, address,capacity,0)
                 store = court_operations()
                 result=store.add_court(court)
-                return redirect(url_for('admin.court_page'))
+                return redirect(url_for('admin.court_page', error=result))
             else:
                 name = request.form['name']
                 address = request.form['address']
@@ -175,7 +186,7 @@ def court_page(key=None,operation=None):
                 key = request.form['key_value']
                 store = court_operations()
                 result=store.update_court(key, name, address, capacity)
-                return redirect(url_for('admin.court_page'))
+                return redirect(url_for('admin.court_page', error=result))
 
 @admin.route('/courts/add')
 @admin.route('/courts/<int:key>')
@@ -186,17 +197,18 @@ def court_edit_page(key=None):
     return render_template('court_edit.html', court=court, current_time=now.ctime())
 
 @admin.route('/transfers', methods=['GET','POST'])
-def transfer_page(key=None,operation=None):
+def transfer_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
             store = transfer_operations()
             result=store.delete_transfer(request.args.get('key'))
-            return redirect(url_for('admin.transfer_page'))
+            return redirect(url_for('admin.transfer_page', error=result))
         else:
             store = transfer_operations()
             transfers=store.get_transfers()
             now = datetime.datetime.now()
-            return render_template('admin_transfers.html', transfers=transfers, current_time=now.ctime())
+            error = request.args.get('error')
+            return render_template('admin_transfers.html', transfers=transfers, error=error, current_time=now.ctime())
     else:
         if request.form['submit']=='cancel':
             return redirect(url_for('admin.transfer_page'))
@@ -210,7 +222,7 @@ def transfer_page(key=None,operation=None):
                 transfer = Transfer(None,playerid, None, oldteamid, None, newteamid, None, seasonid,None, 0)
                 store = transfer_operations()
                 result=store.add_transfer(transfer)
-                return redirect(url_for('admin.transfer_page'))
+                return redirect(url_for('admin.transfer_page', error=result))
             else:
                 key = request.form['key_value']
                 playerid = request.form['playerid']
@@ -219,7 +231,7 @@ def transfer_page(key=None,operation=None):
                 seasonid = request.form['seasonid']
                 store = transfer_operations()
                 result=store.update_transfer(key,playerid,oldteamid,newteamid,seasonid)
-                return redirect(url_for('admin.transfer_page'))
+                return redirect(url_for('admin.transfer_page', error=result))
 
 @admin.route('/transfers/add')
 @admin.route('/transfers/<int:key>')
@@ -238,17 +250,18 @@ def transfer_edit_page(key=None):
 
 
 @admin.route('/hand', methods=['GET','POST'])
-def hand_page(key=None,operation=None):
+def hand_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
             store = hand_operations()
             result=store.delete_hand(request.args.get('key'))
-            return redirect(url_for('admin.hand_page'))
+            return redirect(url_for('admin.hand_page', error=result))
         else:
             store = hand_operations()
             hands=store.get_hands()
             now = datetime.datetime.now()
-            return render_template('admin_hands.html', hands=hands, current_time=now.ctime())
+            error = request.args.get('error')
+            return render_template('admin_hands.html', hands=hands, error=error, current_time=now.ctime())
     else:
         if request.form['submit']=='cancel':
             return redirect(url_for('admin.hand_page'))
@@ -259,13 +272,13 @@ def hand_page(key=None,operation=None):
                 hand = Hand(None,name, 0)
                 store = hand_operations()
                 result=store.add_hand(hand)
-                return redirect(url_for('admin.hand_page'))
+                return redirect(url_for('admin.hand_page', error=result))
             else:
                 name = request.form['name']
                 key = request.form['key_value']
                 store = hand_operations()
                 result=store.update_hand(key, name)
-                return redirect(url_for('admin.hand_page'))
+                return redirect(url_for('admin.hand_page', error=result))
 
 
 @admin.route('/hand/add')
@@ -278,17 +291,18 @@ def hand_edit_page(key=None):
 
 
 @admin.route('/position', methods=['GET','POST'])
-def position_page(key=None,operation=None):
+def position_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
             store = position_operations()
             result=store.delete_position(request.args.get('key'))
-            return redirect(url_for('admin.position_page'))
+            return redirect(url_for('admin.position_page', error=result))
         else:
             store = position_operations()
             positions=store.get_positions()
             now = datetime.datetime.now()
-            return render_template('admin_positions.html', positions=positions, current_time=now.ctime())
+            error = request.args.get('error')
+            return render_template('admin_positions.html', positions=positions, error=error, current_time=now.ctime())
     else:
         if request.form['submit']=='cancel':
             return redirect(url_for('admin.position_page'))
@@ -299,13 +313,13 @@ def position_page(key=None,operation=None):
                 position = Position(None,name, 0)
                 store = position_operations()
                 result=store.add_position(position)
-                return redirect(url_for('admin.position_page'))
+                return redirect(url_for('admin.position_page', error=result))
             else:
                 name = request.form['name']
                 key = request.form['key_value']
                 store = position_operations()
                 result=store.update_position(key, name)
-                return redirect(url_for('admin.position_page'))
+                return redirect(url_for('admin.position_page', error=result))
 
 
 @admin.route('/position/add')
@@ -319,17 +333,18 @@ def position_edit_page(key=None):
 
 
 @admin.route('/season', methods=['GET','POST'])
-def season_page(key=None,operation=None):
+def season_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
             store = season_operations()
             result=store.delete_season(request.args.get('key'))
-            return redirect(url_for('admin.season_page'))
+            return redirect(url_for('admin.season_page',error=result))
         else:
             store = season_operations()
             seasons=store.get_seasons()
             now = datetime.datetime.now()
-            return render_template('admin_seasons.html', seasons=seasons, current_time=now.ctime())
+            error = request.args.get('error')
+            return render_template('admin_seasons.html', seasons=seasons, error=error, current_time=now.ctime())
     else:
         if request.form['submit']=='cancel':
             return redirect(url_for('admin.season_page'))
@@ -340,13 +355,13 @@ def season_page(key=None,operation=None):
                 season = Season(None,name, 0)
                 store = season_operations()
                 result=store.add_season(season)
-                return redirect(url_for('admin.season_page'))
+                return redirect(url_for('admin.season_page', error=result))
             else:
                 name = request.form['name']
                 key = request.form['key_value']
                 store = season_operations()
                 result=store.update_season(key, name)
-                return redirect(url_for('admin.season_page'))
+                return redirect(url_for('admin.season_page', error=result))
 
 
 @admin.route('/season/add')
@@ -359,17 +374,18 @@ def season_edit_page(key=None):
 
 
 @admin.route('/gender', methods=['GET','POST'])
-def gender_page(key=None,operation=None):
+def gender_page(key=None,operation=None, error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
             store = gender_operations()
             result=store.delete_gender(request.args.get('key'))
-            return redirect(url_for('admin.gender_page'))
+            return redirect(url_for('admin.gender_page', error=result))
         else:
             store = gender_operations()
             genders=store.get_genders()
             now = datetime.datetime.now()
-            return render_template('admin_genders.html', genders=genders, current_time=now.ctime())
+            error = request.args.get('error')
+            return render_template('admin_genders.html', genders=genders, error = error, current_time=now.ctime())
     else:
         if request.form['submit']=='cancel':
             return redirect(url_for('admin.gender_page'))
@@ -380,13 +396,13 @@ def gender_page(key=None,operation=None):
                 gender = Gender(None,type, 0)
                 store = gender_operations()
                 result=store.add_gender(gender)
-                return redirect(url_for('admin.gender_page'))
+                return redirect(url_for('admin.gender_page', error=result))
             else:
                 type = request.form['name']
                 key = request.form['key_value']
                 store = gender_operations()
                 result=store.update_gender(key, type)
-                return redirect(url_for('admin.gender_page'))
+                return redirect(url_for('admin.gender_page', error=result))
 
 
 @admin.route('/gender/add')
@@ -399,17 +415,18 @@ def gender_edit_page(key=None):
 
 
 @admin.route('/coaches', methods=['GET','POST'])
-def coach_page(key=None,operation=None):
+def coach_page(key=None,operation=None, error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
             store = coach_operations()
             result=store.delete_coach(request.args.get('key'))
-            return redirect(url_for('admin.coach_page'))
+            return redirect(url_for('admin.coach_page', error=result))
         else:
             store = coach_operations()
             coaches=store.get_coaches()
             now = datetime.datetime.now()
-            return render_template('admin_coaches.html', coaches=coaches, current_time=now.ctime())
+            error = request.args.get('error')
+            return render_template('admin_coaches.html', coaches=coaches, error=error, current_time=now.ctime())
     else:
         if request.form['submit']=='cancel':
             return redirect(url_for('admin.coach_page'))
@@ -425,7 +442,7 @@ def coach_page(key=None,operation=None):
                 coach = Coach(None,name, surname, countryid, None, teamid, None, birthyear, genderid, None, 0)
                 store = coach_operations()
                 result=store.add_coach(coach)
-                return redirect(url_for('admin.coach_page'))
+                return redirect(url_for('admin.coach_page', error=result))
             else:
                 name = request.form['name']
                 surname = request.form['surname']
@@ -436,7 +453,7 @@ def coach_page(key=None,operation=None):
                 genderid = request.form['genderid']
                 store = coach_operations()
                 result=store.update_coach(key,name,surname,countryid,teamid, birthyear, genderid)
-                return redirect(url_for('admin.coach_page'))
+                return redirect(url_for('admin.coach_page', error=result))
 
 @admin.route('/coaches/add')
 @admin.route('/coaches/<int:key>')
@@ -453,17 +470,18 @@ def coach_edit_page(key=None):
     return render_template('coach_edit.html', coach=coach, teams=teams, countries=countries, genders=genders, current_time=now.ctime())
 
 @admin.route('/matches', methods=['GET','POST'])
-def match_page(key=None,operation=None):
+def match_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
             store = match_operations()
             result=store.delete_match(request.args.get('key'))
-            return redirect(url_for('admin.match_page'))
+            return redirect(url_for('admin.match_page',error=result))
         else:
             store = match_operations()
             matches=store.get_matches()
             now = datetime.datetime.now()
-            return render_template('admin_matches.html', matches=matches, current_time=now.ctime())
+            error = request.args.get('error')
+            return render_template('admin_matches.html', matches=matches, error=error, current_time=now.ctime())
     else:
         if request.form['submit']=='cancel':
             return redirect(url_for('admin.match_page'))
@@ -477,7 +495,7 @@ def match_page(key=None,operation=None):
                 match = Match(None,hometeamid, None, awayteamid, None, courtid, None, matchdate, 0)
                 store = match_operations()
                 result=store.add_match(match)
-                return redirect(url_for('admin.match_page'))
+                return redirect(url_for('admin.match_page', error=result))
             else:
                 hometeamid = request.form['hometeamid']
                 awayteamid = request.form['awayteamid']
@@ -486,7 +504,7 @@ def match_page(key=None,operation=None):
                 key = request.form['key_value']
                 store = match_operations()
                 result=store.update_match(key,hometeamid,awayteamid,courtid,matchdate)
-                return redirect(url_for('admin.match_page'))
+                return redirect(url_for('admin.match_page', error=result))
 
 @admin.route('/matches/add')
 @admin.route('/matches/<int:key>')
@@ -503,17 +521,18 @@ def match_edit_page(key=None):
     return render_template('match_edit.html', match=match, teams=teams, courts=courts, current_time=now.ctime())
 
 @admin.route('/players', methods=['GET','POST'])
-def player_page(key=None,operation=None):
+def player_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
             store = player_operations()
             result=store.delete_player(request.args.get('key'))
-            return redirect(url_for('admin.player_page'))
+            return redirect(url_for('admin.player_page',error=result))
         else:
             store = player_operations()
             players=store.get_players()
             now = datetime.datetime.now()
-            return render_template('admin_players.html', players=players, current_time=now.ctime())
+            error = request.args.get('error')
+            return render_template('admin_players.html', players=players, error=error, current_time=now.ctime())
     else:
         if request.form['submit']=='cancel':
             return redirect(url_for('admin.player_page'))
@@ -535,7 +554,7 @@ def player_page(key=None,operation=None):
                 player = Player(None, name, surname, birthdate, height, weight, startdate, teamid, None, countryid, None, genderid, None, positionid, None, handid, None, number, 0)
                 store = player_operations()
                 result=store.add_player(player)
-                return redirect(url_for('admin.player_page'))
+                return redirect(url_for('admin.player_page', error=result))
             else:
                 name = request.form['name']
                 surname = request.form['surname']
@@ -552,7 +571,7 @@ def player_page(key=None,operation=None):
                 key = request.form['key_value']
                 store = player_operations()
                 result=store.update_player(key,name, surname, birthdate, height, weight, startdate, teamid, countryid, genderid, positionid, handid, number)
-                return redirect(url_for('admin.player_page'))
+                return redirect(url_for('admin.player_page', error=result))
 
 @admin.route('/players/add')
 @admin.route('/players/<int:key>')
@@ -576,17 +595,18 @@ def player_edit_page(key=None):
 
 
 @admin.route('/statistics', methods=['GET','POST'])
-def statistic_page(key=None,operation=None):
+def statistic_page(key=None,operation=None, error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
             store = statistic_operations()
             result=store.delete_statistic(request.args.get('key'))
-            return redirect(url_for('admin.statistic_page'))
+            return redirect(url_for('admin.statistic_page', error=result))
         else:
             store = statistic_operations()
             statistics=store.get_statistics()
             now = datetime.datetime.now()
-            return render_template('admin_statistics.html', statistics=statistics, current_time=now.ctime())
+            error = request.args.get('error')
+            return render_template('admin_statistics.html', statistics=statistics, error=error, current_time=now.ctime())
     else:
         if request.form['submit']=='cancel':
             return redirect(url_for('admin.statistic_page'))
@@ -602,7 +622,7 @@ def statistic_page(key=None,operation=None):
                 statistic = Statistic(None, assistnumber, blocknumber, score, cardnumber, seasonid, None, playerid, None, 0)
                 store = statistic_operations()
                 result=store.add_statistic(statistic)
-                return redirect(url_for('admin.statistic_page'))
+                return redirect(url_for('admin.statistic_page', error=result))
             else:
                 key = request.form['key_value']
                 assistnumber = request.form['assistnumber']
@@ -613,7 +633,7 @@ def statistic_page(key=None,operation=None):
                 playerid = request.form['playerid']
                 store = statistic_operations()
                 result=store.update_statistic(key,assistnumber,blocknumber,score,cardnumber,seasonid,playerid)
-                return redirect(url_for('admin.statistic_page'))
+                return redirect(url_for('admin.statistic_page', error=result))
 
 @admin.route('/statistics/add')
 @admin.route('/statistics/<int:key>')

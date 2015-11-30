@@ -18,7 +18,7 @@ class match_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT objectid, hometeamid, awayteamid, courtid, matchdate FROM match WHERE deleted = 0"""
+            statement = """SELECT objectid, hometeamid, awayteamid, courtid, matchdate FROM match WHERE deleted = 0 ORDER BY objectid"""
             cursor.execute(statement)
             matches = [(key, Match(key, hometeamid, storeTeam.get_team(hometeamid), awayteamid, storeTeam.get_team(awayteamid), courtid, storeCourt.get_court(courtid), matchdate, 0)) for key, hometeamid, awayteamid, courtid, matchdate in cursor]
             cursor.close()
@@ -38,12 +38,19 @@ class match_operations:
             cursor.execute("""INSERT INTO match (hometeamid, awayteamid, courtid, matchdate) VALUES (%s, %s, %s, %s)""",(Match.hometeamid, Match.awayteamid, Match.courtid, Match.matchdate))
             cursor.close()
             connection.commit()
-        except dbapi2.DatabaseError:
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
             if connection:
-                connection.close()
+                connection.rollback()
+        except dbapi2.DatabaseError:
+            result = 'databaseerror'
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
     def get_match(self, key):
         global connection
         storeCourt = court_operations()
@@ -73,25 +80,40 @@ class match_operations:
             cursor.execute(statement, (hometeamid, awayteamid, courtid, matchdate, key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def delete_match(self,key):
         global connection
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """update match set deleted = 1 where (objectid=(%s))"""
+#             statement = """update match set deleted = 1 where (objectid=(%s))"""
+            statement = """delete from match where (objectid=(%s))"""
             cursor.execute(statement, (key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result

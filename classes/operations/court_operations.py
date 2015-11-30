@@ -11,7 +11,7 @@ class court_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT objectid, name, address, capacity FROM court WHERE deleted=0"""
+            statement = """SELECT objectid, name, address, capacity FROM court WHERE deleted=0 ORDER BY objectid"""
             cursor.execute(statement)
             courts = [(key, Court(key,name,address,capacity,0)) for key, name, address, capacity in cursor]
             cursor.close()
@@ -31,12 +31,19 @@ class court_operations:
             cursor.execute("""INSERT INTO court (name, address, capacity) VALUES (%s, %s, %s)""",(Court.name,Court.address,Court.capacity))
             cursor.close()
             connection.commit()
-        except dbapi2.DatabaseError:
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
             if connection:
-                connection.close()
+                connection.rollback()
+        except dbapi2.DatabaseError:
+            result = 'databaseerror'
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def get_court(self, key):
         global connection
@@ -64,24 +71,38 @@ class court_operations:
             cursor.execute(statement, (name, address, capacity, key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def delete_court(self,key):
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """update court set deleted = 1 where (objectid=(%s))"""
+            statement = """delete from court where (objectid=(%s))"""
             cursor.execute(statement, (key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result

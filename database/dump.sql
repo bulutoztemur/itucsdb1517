@@ -9,18 +9,91 @@ SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
---
+SET search_path = public, pg_catalog;
 
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+ALTER TABLE ONLY public.usertable DROP CONSTRAINT usertable_userroleid_fkey;
+ALTER TABLE ONLY public.usertable DROP CONSTRAINT usertable_userinformationid_fkey;
+ALTER TABLE ONLY public.userinformation DROP CONSTRAINT userinformation_favoriteteamid_fkey;
+ALTER TABLE ONLY public.transfer DROP CONSTRAINT transfer_seasonid_fkey;
+ALTER TABLE ONLY public.transfer DROP CONSTRAINT transfer_playerid_fkey;
+ALTER TABLE ONLY public.transfer DROP CONSTRAINT transfer_oldteamid_fkey;
+ALTER TABLE ONLY public.transfer DROP CONSTRAINT transfer_newteamid_fkey;
+ALTER TABLE ONLY public.team DROP CONSTRAINT team_courtid_fkey;
+ALTER TABLE ONLY public.team DROP CONSTRAINT team_countryid_fkey;
+ALTER TABLE ONLY public.statistic DROP CONSTRAINT statistic_seasonid_fkey;
+ALTER TABLE ONLY public.statistic DROP CONSTRAINT statistic_playerid_fkey;
+ALTER TABLE ONLY public.player DROP CONSTRAINT player_teamid_fkey;
+ALTER TABLE ONLY public.player DROP CONSTRAINT player_positionid_fkey;
+ALTER TABLE ONLY public.player DROP CONSTRAINT player_handid_fkey;
+ALTER TABLE ONLY public.player DROP CONSTRAINT player_genderid_fkey;
+ALTER TABLE ONLY public.player DROP CONSTRAINT player_countryid_fkey;
+ALTER TABLE ONLY public.match DROP CONSTRAINT match_hometeamid_fkey;
+ALTER TABLE ONLY public.match DROP CONSTRAINT match_courtid_fkey;
+ALTER TABLE ONLY public.match DROP CONSTRAINT match_awayteamid_fkey;
+ALTER TABLE ONLY public.coach DROP CONSTRAINT coach_teamid_fkey;
+ALTER TABLE ONLY public.coach DROP CONSTRAINT coach_genderid_fkey;
+ALTER TABLE ONLY public.coach DROP CONSTRAINT coach_countryid_fkey;
+ALTER TABLE ONLY public.usertable DROP CONSTRAINT usertable_pkey;
+ALTER TABLE ONLY public.userrole DROP CONSTRAINT userrole_pkey;
+ALTER TABLE ONLY public.userinformation DROP CONSTRAINT userinformation_pkey;
+ALTER TABLE ONLY public.transfer DROP CONSTRAINT transfer_pkey;
+ALTER TABLE ONLY public.team DROP CONSTRAINT team_pkey;
+ALTER TABLE ONLY public.statistic DROP CONSTRAINT statistic_pkey;
+ALTER TABLE ONLY public.season DROP CONSTRAINT season_pkey;
+ALTER TABLE ONLY public."position" DROP CONSTRAINT position_pkey;
+ALTER TABLE ONLY public.player DROP CONSTRAINT player_pkey;
+ALTER TABLE ONLY public.match DROP CONSTRAINT match_pkey;
+ALTER TABLE ONLY public.hand DROP CONSTRAINT hand_pkey;
+ALTER TABLE ONLY public.gender DROP CONSTRAINT gender_pkey;
+ALTER TABLE ONLY public.court DROP CONSTRAINT court_pkey;
+ALTER TABLE ONLY public.country DROP CONSTRAINT country_pkey;
+ALTER TABLE ONLY public.coach DROP CONSTRAINT coach_pkey;
+ALTER TABLE public.usertable ALTER COLUMN objectid DROP DEFAULT;
+ALTER TABLE public.userrole ALTER COLUMN objectid DROP DEFAULT;
+ALTER TABLE public.userinformation ALTER COLUMN objectid DROP DEFAULT;
+ALTER TABLE public.transfer ALTER COLUMN objectid DROP DEFAULT;
+ALTER TABLE public.team ALTER COLUMN objectid DROP DEFAULT;
+ALTER TABLE public.statistic ALTER COLUMN objectid DROP DEFAULT;
+ALTER TABLE public.season ALTER COLUMN objectid DROP DEFAULT;
+ALTER TABLE public."position" ALTER COLUMN objectid DROP DEFAULT;
+ALTER TABLE public.player ALTER COLUMN objectid DROP DEFAULT;
+ALTER TABLE public.match ALTER COLUMN objectid DROP DEFAULT;
+ALTER TABLE public.hand ALTER COLUMN objectid DROP DEFAULT;
+ALTER TABLE public.gender ALTER COLUMN objectid DROP DEFAULT;
+ALTER TABLE public.court ALTER COLUMN objectid DROP DEFAULT;
+ALTER TABLE public.country ALTER COLUMN objectid DROP DEFAULT;
+ALTER TABLE public.coach ALTER COLUMN objectid DROP DEFAULT;
+DROP SEQUENCE public.usertable_objectid_seq;
+DROP TABLE public.usertable;
+DROP SEQUENCE public.userrole_objectid_seq;
+DROP TABLE public.userrole;
+DROP SEQUENCE public.userinformation_objectid_seq;
+DROP TABLE public.userinformation;
+DROP SEQUENCE public.transfer_objectid_seq;
+DROP TABLE public.transfer;
+DROP SEQUENCE public.team_objectid_seq;
+DROP TABLE public.team;
+DROP SEQUENCE public.statistic_objectid_seq;
+DROP TABLE public.statistic;
+DROP SEQUENCE public.season_objectid_seq;
+DROP TABLE public.season;
+DROP SEQUENCE public.position_objectid_seq;
+DROP TABLE public."position";
+DROP SEQUENCE public.player_objectid_seq;
+DROP TABLE public.player;
+DROP SEQUENCE public.match_objectid_seq;
+DROP TABLE public.match;
+DROP SEQUENCE public.hand_objectid_seq;
+DROP TABLE public.hand;
+DROP SEQUENCE public.gender_objectid_seq;
+DROP TABLE public.gender;
+DROP SEQUENCE public.court_objectid_seq;
+DROP TABLE public.court;
+DROP SEQUENCE public.country_objectid_seq;
+DROP TABLE public.country;
+DROP SEQUENCE public.coach_objectid_seq;
+DROP TABLE public.coach;
 
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 SET search_path = public, pg_catalog;
@@ -687,59 +760,59 @@ ALTER TABLE ONLY usertable ALTER COLUMN objectid SET DEFAULT nextval('usertable_
 -- Data for Name: coach; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY coach (objectid, name, surname, countryid, teamid, birthday, genderid, deleted) FROM stdin;
-1	Ergin	Ataman	1	1	1970-10-30	1	0
-\.
+INSERT INTO coach VALUES (1, 'Ataman', 'Güneyligil', 3, 1, '1970-12-10', 1, 0);
+INSERT INTO coach VALUES (2, 'Marcello ', 'Abbondanza', 8, 2, '1970-12-10', 1, 0);
+INSERT INTO coach VALUES (3, 'Giovanni ', 'Guidetti', 8, 3, '1970-12-10', 1, 0);
 
 
 --
 -- Name: coach_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('coach_objectid_seq', 1, true);
+SELECT pg_catalog.setval('coach_objectid_seq', 3, true);
 
 
 --
 -- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY country (objectid, name, deleted) FROM stdin;
-1	Turkey	0
-\.
+INSERT INTO country VALUES (3, 'Turkey', 0);
+INSERT INTO country VALUES (4, 'England', 0);
+INSERT INTO country VALUES (5, 'Spain', 0);
+INSERT INTO country VALUES (8, 'Italy', 0);
 
 
 --
 -- Name: country_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('country_objectid_seq', 1, true);
+SELECT pg_catalog.setval('country_objectid_seq', 8, true);
 
 
 --
 -- Data for Name: court; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY court (objectid, name, address, capacity, deleted) FROM stdin;
-1	Abdi İpekçi	Maslak Arena	20000	0
-2	Ülker Arena	Bağcılar	3000	0
-\.
+INSERT INTO court VALUES (1, 'Burhan Felek Spor Salonu', 'Üsküdar, İstanbul', 7500, 0);
+INSERT INTO court VALUES (2, 'Muhtar Sencer Sports Center', 'Kadıköy, İstanbul', 7500, 0);
+INSERT INTO court VALUES (3, 'Santiago Bernabéu', 'Madrid, Spain', 12000, 0);
+INSERT INTO court VALUES (4, 'Vakıfbank Spor Sarayı', 'Üsküdar, İstanbul', 2500, 0);
+INSERT INTO court VALUES (5, 'Eczacıbaşı Sport Center', 'Ayazağa, İstanbul', 1000, 0);
 
 
 --
 -- Name: court_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('court_objectid_seq', 2, true);
+SELECT pg_catalog.setval('court_objectid_seq', 5, true);
 
 
 --
 -- Data for Name: gender; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY gender (objectid, type, deleted) FROM stdin;
-1	Male	0
-2	Female	0
-\.
+INSERT INTO gender VALUES (1, 'Male', 0);
+INSERT INTO gender VALUES (2, 'Female', 0);
 
 
 --
@@ -753,178 +826,171 @@ SELECT pg_catalog.setval('gender_objectid_seq', 2, true);
 -- Data for Name: hand; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY hand (objectid, name, deleted) FROM stdin;
-1	Left	0
-2	Right	0
-\.
+INSERT INTO hand VALUES (1, 'Left', 0);
+INSERT INTO hand VALUES (2, 'Right', 0);
+INSERT INTO hand VALUES (4, 'Both', 0);
 
 
 --
 -- Name: hand_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('hand_objectid_seq', 2, true);
+SELECT pg_catalog.setval('hand_objectid_seq', 4, true);
 
 
 --
 -- Data for Name: match; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY match (objectid, hometeamid, awayteamid, courtid, matchdate, deleted) FROM stdin;
-1	1	2	1	2015-10-30	0
-\.
+INSERT INTO match VALUES (1, 1, 2, 1, '2014-12-10', 0);
+INSERT INTO match VALUES (2, 2, 3, 2, '2015-10-12', 0);
+INSERT INTO match VALUES (3, 3, 4, 4, '2015-10-31', 0);
 
 
 --
 -- Name: match_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('match_objectid_seq', 1, true);
+SELECT pg_catalog.setval('match_objectid_seq', 3, true);
 
 
 --
 -- Data for Name: player; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY player (objectid, name, surname, birthdate, height, weight, startdate, teamid, countryid, genderid, positionid, handid, number, deleted) FROM stdin;
-1	Neslihan	Darnel	1980-10-30	185	70	2000-10-30	1	1	2	1	2	8	0
-\.
+INSERT INTO player VALUES (1, 'Neslihan', 'Darnel', '1983-12-09', 187, 72, '1995-03-12', 5, 3, 2, 3, 1, 17, 0);
+INSERT INTO player VALUES (2, 'Nadia', 'Centoni', '1981-06-19', 185, 63, '1998-01-01', 1, 8, 2, 3, 2, 13, 0);
+INSERT INTO player VALUES (3, 'Merve', 'Dalbeler', '1987-06-27', 180, 70, '2005-01-01', 2, 3, 2, 6, 1, 2, 0);
 
 
 --
 -- Name: player_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('player_objectid_seq', 1, true);
+SELECT pg_catalog.setval('player_objectid_seq', 3, true);
 
 
 --
 -- Data for Name: position; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY "position" (objectid, name, deleted) FROM stdin;
-1	Center	0
-\.
+INSERT INTO "position" VALUES (1, 'Right Back', 0);
+INSERT INTO "position" VALUES (2, 'Right Front', 0);
+INSERT INTO "position" VALUES (3, 'Middle Front', 0);
+INSERT INTO "position" VALUES (4, 'Left Front', 0);
+INSERT INTO "position" VALUES (5, 'Left Back', 0);
+INSERT INTO "position" VALUES (6, 'Middle Back', 0);
 
 
 --
 -- Name: position_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('position_objectid_seq', 1, true);
+SELECT pg_catalog.setval('position_objectid_seq', 6, true);
 
 
 --
 -- Data for Name: season; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY season (objectid, name, deleted) FROM stdin;
-1	2014-2015	0
-\.
+INSERT INTO season VALUES (1, '2011-2012', 0);
+INSERT INTO season VALUES (2, '2012-2013', 0);
+INSERT INTO season VALUES (3, '2013-2014', 0);
+INSERT INTO season VALUES (4, '2014-2015', 0);
 
 
 --
 -- Name: season_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('season_objectid_seq', 1, true);
+SELECT pg_catalog.setval('season_objectid_seq', 4, true);
 
 
 --
 -- Data for Name: statistic; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY statistic (objectid, assistnumber, blocknumber, score, cardnumber, seasonid, playerid, deleted) FROM stdin;
-1	30	15	212	2	1	1	0
-\.
+INSERT INTO statistic VALUES (1, 188, 192, 170, 55, 2, 1, 0);
+INSERT INTO statistic VALUES (2, 180, 195, 200, 25, 3, 3, 0);
 
 
 --
 -- Name: statistic_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('statistic_objectid_seq', 1, true);
+SELECT pg_catalog.setval('statistic_objectid_seq', 2, true);
 
 
 --
 -- Data for Name: team; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY team (objectid, name, shirtcolour, foundationdate, countryid, courtid, deleted) FROM stdin;
-1	Galatasaray	Red-Yellow	1905-05-30	1	1	0
-2	Fenerbahçe	Yellow-blue	1907-08-30	1	2	0
-\.
+INSERT INTO team VALUES (1, 'Galatasaray', 'Yellow-Red', '1905-10-01', 3, 1, 0);
+INSERT INTO team VALUES (2, 'Fenerbahçe', 'Blue-Yellow', '1905-05-03', 3, 2, 0);
+INSERT INTO team VALUES (3, 'Vakıfbank', 'Yellow-White', '1986-01-01', 3, 4, 0);
+INSERT INTO team VALUES (4, 'Real Madrid', 'White', '1902-03-05', 5, 3, 0);
+INSERT INTO team VALUES (5, 'Eczacıbaşı', 'Blue-White', '1966-03-05', 3, 5, 0);
 
 
 --
 -- Name: team_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('team_objectid_seq', 2, true);
+SELECT pg_catalog.setval('team_objectid_seq', 5, true);
 
 
 --
 -- Data for Name: transfer; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY transfer (objectid, playerid, oldteamid, newteamid, seasonid, deleted) FROM stdin;
-1	1	1	2	1	0
-\.
+INSERT INTO transfer VALUES (1, 1, 3, 5, 1, 0);
+INSERT INTO transfer VALUES (2, 3, 1, 2, 3, 0);
 
 
 --
 -- Name: transfer_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('transfer_objectid_seq', 1, true);
+SELECT pg_catalog.setval('transfer_objectid_seq', 2, true);
 
 
 --
 -- Data for Name: userinformation; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY userinformation (objectid, favoriteteamid, name, surname, birthdate, deleted) FROM stdin;
-1	1	İsmail Tunahan	Er	1994-09-18	0
-\.
 
 
 --
 -- Name: userinformation_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('userinformation_objectid_seq', 1, true);
+SELECT pg_catalog.setval('userinformation_objectid_seq', 1, false);
 
 
 --
 -- Data for Name: userrole; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY userrole (objectid, name, deleted) FROM stdin;
-1	Administrator	0
-\.
 
 
 --
 -- Name: userrole_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('userrole_objectid_seq', 1, true);
+SELECT pg_catalog.setval('userrole_objectid_seq', 1, false);
 
 
 --
 -- Data for Name: usertable; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-COPY usertable (objectid, username, password, userroleid, userinformationid, deleted) FROM stdin;
-1	erism	\\x3132333435	1	1	0
-\.
 
 
 --
 -- Name: usertable_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('usertable_objectid_seq', 1, true);
+SELECT pg_catalog.setval('usertable_objectid_seq', 1, false);
 
 
 --
@@ -1045,6 +1111,182 @@ ALTER TABLE ONLY userrole
 
 ALTER TABLE ONLY usertable
     ADD CONSTRAINT usertable_pkey PRIMARY KEY (objectid);
+
+
+--
+-- Name: coach_countryid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY coach
+    ADD CONSTRAINT coach_countryid_fkey FOREIGN KEY (countryid) REFERENCES country(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: coach_genderid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY coach
+    ADD CONSTRAINT coach_genderid_fkey FOREIGN KEY (genderid) REFERENCES gender(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: coach_teamid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY coach
+    ADD CONSTRAINT coach_teamid_fkey FOREIGN KEY (teamid) REFERENCES team(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: match_awayteamid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY match
+    ADD CONSTRAINT match_awayteamid_fkey FOREIGN KEY (awayteamid) REFERENCES team(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: match_courtid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY match
+    ADD CONSTRAINT match_courtid_fkey FOREIGN KEY (courtid) REFERENCES court(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: match_hometeamid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY match
+    ADD CONSTRAINT match_hometeamid_fkey FOREIGN KEY (hometeamid) REFERENCES team(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: player_countryid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY player
+    ADD CONSTRAINT player_countryid_fkey FOREIGN KEY (countryid) REFERENCES country(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: player_genderid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY player
+    ADD CONSTRAINT player_genderid_fkey FOREIGN KEY (genderid) REFERENCES gender(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: player_handid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY player
+    ADD CONSTRAINT player_handid_fkey FOREIGN KEY (handid) REFERENCES hand(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: player_positionid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY player
+    ADD CONSTRAINT player_positionid_fkey FOREIGN KEY (positionid) REFERENCES "position"(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: player_teamid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY player
+    ADD CONSTRAINT player_teamid_fkey FOREIGN KEY (teamid) REFERENCES team(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: statistic_playerid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY statistic
+    ADD CONSTRAINT statistic_playerid_fkey FOREIGN KEY (playerid) REFERENCES player(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: statistic_seasonid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY statistic
+    ADD CONSTRAINT statistic_seasonid_fkey FOREIGN KEY (seasonid) REFERENCES season(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: team_countryid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY team
+    ADD CONSTRAINT team_countryid_fkey FOREIGN KEY (countryid) REFERENCES country(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: team_courtid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY team
+    ADD CONSTRAINT team_courtid_fkey FOREIGN KEY (courtid) REFERENCES court(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: transfer_newteamid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY transfer
+    ADD CONSTRAINT transfer_newteamid_fkey FOREIGN KEY (newteamid) REFERENCES team(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: transfer_oldteamid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY transfer
+    ADD CONSTRAINT transfer_oldteamid_fkey FOREIGN KEY (oldteamid) REFERENCES team(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: transfer_playerid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY transfer
+    ADD CONSTRAINT transfer_playerid_fkey FOREIGN KEY (playerid) REFERENCES player(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: transfer_seasonid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY transfer
+    ADD CONSTRAINT transfer_seasonid_fkey FOREIGN KEY (seasonid) REFERENCES season(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: userinformation_favoriteteamid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY userinformation
+    ADD CONSTRAINT userinformation_favoriteteamid_fkey FOREIGN KEY (favoriteteamid) REFERENCES team(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: usertable_userinformationid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY usertable
+    ADD CONSTRAINT usertable_userinformationid_fkey FOREIGN KEY (userinformationid) REFERENCES userinformation(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: usertable_userroleid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vagrant
+--
+
+ALTER TABLE ONLY usertable
+    ADD CONSTRAINT usertable_userroleid_fkey FOREIGN KEY (userroleid) REFERENCES userrole(objectid) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --

@@ -11,7 +11,7 @@ class hand_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT objectid, name FROM hand WHERE deleted=0"""
+            statement = """SELECT objectid, name FROM hand WHERE deleted=0 ORDER BY objectid"""
             cursor.execute(statement)
             hands = [(key, Hand(key,name,0)) for key, name in cursor]
             cursor.close()
@@ -31,12 +31,19 @@ class hand_operations:
             cursor.execute("""INSERT INTO hand (name) VALUES (%s)""",(Hand.name,))
             cursor.close()
             connection.commit()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def get_hand(self, key):
         global connection
@@ -64,24 +71,39 @@ class hand_operations:
             cursor.execute(statement, (name, key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def delete_hand(self,key):
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """update hand set deleted = 1 where (objectid=(%s))"""
+#             statement = """update hand set deleted = 1 where (objectid=(%s))"""
+            statement = """delete from hand where (objectid=(%s))"""
             cursor.execute(statement, (key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result

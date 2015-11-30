@@ -17,7 +17,7 @@ class team_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT team.objectid, team.name, team.shirtcolour, team.foundationdate, team.countryid,team.courtid FROM team WHERE team.deleted = 0 """
+            statement = """SELECT team.objectid, team.name, team.shirtcolour, team.foundationdate, team.countryid,team.courtid FROM team WHERE team.deleted = 0 ORDER BY objectid """
             cursor.execute(statement)
             teams = [(key, Team(key,name,color,date,countryid, storeCountry.get_country(countryid),courtid,storeCourt.get_court(courtid) , 0)) for key, name, color, date, countryid, courtid in cursor]
             cursor.close()
@@ -37,12 +37,19 @@ class team_operations:
             cursor.execute("""INSERT INTO team (name, shirtcolour, foundationdate, countryid, courtid) VALUES (%s, %s, %s, %s, %s)""",(Team.name,Team.color,Team.date,Team.countryid,Team.courtid))
             cursor.close()
             connection.commit()
-        except dbapi2.DatabaseError:
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
             if connection:
-                connection.close()
+                connection.rollback()
+        except dbapi2.DatabaseError:
+            result = 'databaseerror'
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def get_team(self, key):
         global connection
@@ -72,25 +79,40 @@ class team_operations:
             cursor.execute(statement, (name, color, date, countryid, courtid, key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def delete_team(self,key):
         global connection
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """update team set deleted = 1 where (objectid=(%s))"""
+#             statement = """update team set deleted = 1 where (objectid=(%s))"""
+            statement = """delete from team where (objectid=(%s))"""
             cursor.execute(statement, (key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result

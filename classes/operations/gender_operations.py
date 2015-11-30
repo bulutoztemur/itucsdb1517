@@ -11,7 +11,7 @@ class gender_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT objectid, type FROM gender WHERE deleted=0"""
+            statement = """SELECT objectid, type FROM gender WHERE deleted=0 order by objectid"""
             cursor.execute(statement)
             genders = [(key, Gender(key,type,0)) for key, type in cursor]
             cursor.close()
@@ -31,12 +31,19 @@ class gender_operations:
             cursor.execute("""INSERT INTO gender (type) VALUES (%s)""",(Gender.type,))
             cursor.close()
             connection.commit()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def get_gender(self, key):
         global connection
@@ -64,24 +71,39 @@ class gender_operations:
             cursor.execute(statement, (type, key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
-
+            return result
     def delete_gender(self,key):
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """update gender set deleted = 1 where (objectid=(%s))"""
+            #statement = """update gender set deleted = 1 where (objectid=(%s))"""
+            statement = """DELETE FROM gender WHERE (objectid=(%s))"""
             cursor.execute(statement, (key,))
             connection.commit()
             cursor.close()
-        except dbapi2.DatabaseError:
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
             if connection:
                 connection.rollback()
+        except dbapi2.DatabaseError:
+            result = 'databaseerror'
+            if connection:
+                connection.rollback()
+
         finally:
             if connection:
                 connection.close()
+            return result

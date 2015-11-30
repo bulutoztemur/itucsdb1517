@@ -16,7 +16,7 @@ class statistic_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT statistic.objectid, statistic.assistnumber, statistic.blocknumber, statistic.score, statistic.cardnumber, statistic.seasonid, statistic.playerid FROM statistic where statistic.deleted=0"""
+            statement = """SELECT statistic.objectid, statistic.assistnumber, statistic.blocknumber, statistic.score, statistic.cardnumber, statistic.seasonid, statistic.playerid FROM statistic where statistic.deleted=0 ORDER BY objectid"""
             cursor.execute(statement)
             statistics = [(key, Statistic(key, assistnumber, blocknumber,score, cardnumber, seasonid, storeSeason.get_season(seasonid), playerid, storePlayer.get_player(playerid), 0)) for key, assistnumber, blocknumber, score, cardnumber, seasonid, playerid in cursor]
             cursor.close()
@@ -37,12 +37,19 @@ class statistic_operations:
             cursor.execute("""INSERT INTO statistic (assistnumber, blocknumber, score, cardnumber, seasonid, playerid) VALUES (%s, %s, %s, %s, %s, %s)""",(Statistic.assistnumber,Statistic.blocknumber,Statistic.score,Statistic.cardnumber,Statistic.seasonid,Statistic.playerid))
             cursor.close()
             connection.commit()
-        except dbapi2.DatabaseError:
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
             if connection:
-                connection.close()
+                connection.rollback()
+        except dbapi2.DatabaseError:
+            result = 'databaseerror'
+            if connection:
+                connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def get_statistic(self, key):
         global connection
@@ -72,24 +79,39 @@ class statistic_operations:
             cursor.execute(statement, (assistnumber, blocknumber, score, cardnumber, seasonid, playerid, key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def delete_statistic(self,key):
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """update statistic set deleted = 1 where (objectid=(%s))"""
+#             statement = """update statistic set deleted = 1 where (objectid=(%s))"""
+            statement = """delete from statistic where (objectid=(%s))"""
             cursor.execute(statement, (key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result

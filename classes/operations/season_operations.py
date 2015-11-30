@@ -11,7 +11,7 @@ class season_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """SELECT objectid, name FROM season WHERE deleted=0"""
+            statement = """SELECT objectid, name FROM season WHERE deleted=0 ORDER BY objectid"""
             cursor.execute(statement)
             seasons = [(key, Season(key,name,0)) for key, name in cursor]
             cursor.close()
@@ -31,12 +31,19 @@ class season_operations:
             cursor.execute("""INSERT INTO season (name) VALUES (%s)""",(Season.name,))
             cursor.close()
             connection.commit()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def get_season(self, key):
         global connection
@@ -64,24 +71,39 @@ class season_operations:
             cursor.execute(statement, (name, key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
 
     def delete_season(self,key):
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            statement = """update season set deleted = 1 where (objectid=(%s))"""
+#             statement = """update season set deleted = 1 where (objectid=(%s))"""
+            statement = """delete from season where (objectid=(%s))"""
             cursor.execute(statement, (key,))
             connection.commit()
             cursor.close()
+            result = 'success'
+        except dbapi2.IntegrityError:
+            result = 'integrityerror'
+            if connection:
+                connection.rollback()
         except dbapi2.DatabaseError:
+            result = 'databaseerror'
             if connection:
                 connection.rollback()
         finally:
             if connection:
                 connection.close()
+            return result
