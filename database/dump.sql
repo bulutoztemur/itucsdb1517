@@ -118,7 +118,7 @@ CREATE TABLE coach (
 );
 
 
-ALTER TABLE public.coach OWNER TO vagrant;
+--ALTER TABLE public.coach OWNER TO vagrant;
 
 --
 -- Name: coach_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -132,7 +132,7 @@ CREATE SEQUENCE coach_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.coach_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.coach_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: coach_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
@@ -152,7 +152,7 @@ CREATE TABLE country (
 );
 
 
-ALTER TABLE public.country OWNER TO vagrant;
+--ALTER TABLE public.country OWNER TO vagrant;
 
 --
 -- Name: country_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -166,7 +166,7 @@ CREATE SEQUENCE country_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.country_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.country_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: country_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
@@ -188,7 +188,7 @@ CREATE TABLE court (
 );
 
 
-ALTER TABLE public.court OWNER TO vagrant;
+--ALTER TABLE public.court OWNER TO vagrant;
 
 --
 -- Name: court_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -202,7 +202,7 @@ CREATE SEQUENCE court_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.court_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.court_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: court_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
@@ -222,7 +222,7 @@ CREATE TABLE gender (
 );
 
 
-ALTER TABLE public.gender OWNER TO vagrant;
+--ALTER TABLE public.gender OWNER TO vagrant;
 
 --
 -- Name: gender_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -236,7 +236,7 @@ CREATE SEQUENCE gender_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.gender_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.gender_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: gender_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
@@ -256,7 +256,7 @@ CREATE TABLE hand (
 );
 
 
-ALTER TABLE public.hand OWNER TO vagrant;
+--ALTER TABLE public.hand OWNER TO vagrant;
 
 --
 -- Name: hand_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -270,7 +270,7 @@ CREATE SEQUENCE hand_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.hand_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.hand_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: hand_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
@@ -293,7 +293,7 @@ CREATE TABLE match (
 );
 
 
-ALTER TABLE public.match OWNER TO vagrant;
+--ALTER TABLE public.match OWNER TO vagrant;
 
 --
 -- Name: match_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -307,7 +307,7 @@ CREATE SEQUENCE match_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.match_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.match_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: match_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
@@ -338,7 +338,7 @@ CREATE TABLE player (
 );
 
 
-ALTER TABLE public.player OWNER TO vagrant;
+--ALTER TABLE public.player OWNER TO vagrant;
 
 --
 -- Name: player_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -352,7 +352,7 @@ CREATE SEQUENCE player_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.player_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.player_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: player_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
@@ -372,7 +372,7 @@ CREATE TABLE "position" (
 );
 
 
-ALTER TABLE public."position" OWNER TO vagrant;
+--ALTER TABLE public."position" OWNER TO vagrant;
 
 --
 -- Name: position_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -386,7 +386,7 @@ CREATE SEQUENCE position_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.position_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.position_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: position_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
@@ -406,7 +406,7 @@ CREATE TABLE season (
 );
 
 
-ALTER TABLE public.season OWNER TO vagrant;
+--ALTER TABLE public.season OWNER TO vagrant;
 
 --
 -- Name: season_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -420,7 +420,7 @@ CREATE SEQUENCE season_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.season_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.season_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: season_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
@@ -445,7 +445,7 @@ CREATE TABLE statistic (
 );
 
 
-ALTER TABLE public.statistic OWNER TO vagrant;
+--ALTER TABLE public.statistic OWNER TO vagrant;
 
 --
 -- Name: statistic_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -459,7 +459,7 @@ CREATE SEQUENCE statistic_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.statistic_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.statistic_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: statistic_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
@@ -483,7 +483,7 @@ CREATE TABLE team (
 );
 
 
-ALTER TABLE public.team OWNER TO vagrant;
+--ALTER TABLE public.team OWNER TO vagrant;
 
 --
 -- Name: team_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -497,7 +497,7 @@ CREATE SEQUENCE team_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.team_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.team_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: team_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
@@ -520,7 +520,7 @@ CREATE TABLE transfer (
 );
 
 
-ALTER TABLE public.transfer OWNER TO vagrant;
+--ALTER TABLE public.transfer OWNER TO vagrant;
 
 --
 -- Name: transfer_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -534,7 +534,7 @@ CREATE SEQUENCE transfer_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.transfer_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.transfer_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: transfer_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
@@ -557,7 +557,7 @@ CREATE TABLE userinformation (
 );
 
 
-ALTER TABLE public.userinformation OWNER TO vagrant;
+--ALTER TABLE public.userinformation OWNER TO vagrant;
 
 --
 -- Name: userinformation_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -571,7 +571,7 @@ CREATE SEQUENCE userinformation_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.userinformation_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.userinformation_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: userinformation_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
@@ -591,7 +591,7 @@ CREATE TABLE userrole (
 );
 
 
-ALTER TABLE public.userrole OWNER TO vagrant;
+--ALTER TABLE public.userrole OWNER TO vagrant;
 
 --
 -- Name: userrole_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -605,7 +605,7 @@ CREATE SEQUENCE userrole_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.userrole_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.userrole_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: userrole_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
@@ -628,7 +628,7 @@ CREATE TABLE usertable (
 );
 
 
-ALTER TABLE public.usertable OWNER TO vagrant;
+--ALTER TABLE public.usertable OWNER TO vagrant;
 
 --
 -- Name: usertable_objectid_seq; Type: SEQUENCE; Schema: public; Owner: vagrant
@@ -642,7 +642,7 @@ CREATE SEQUENCE usertable_objectid_seq
     CACHE 1;
 
 
-ALTER TABLE public.usertable_objectid_seq OWNER TO vagrant;
+--ALTER TABLE public.usertable_objectid_seq OWNER TO vagrant;
 
 --
 -- Name: usertable_objectid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vagrant
