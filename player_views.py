@@ -1,10 +1,18 @@
 import datetime
 
 from flask import render_template
+from flask import url_for
+from flask import redirect
+from flask import request
 
 from config import app
+from classes.player import Player
+from classes.operations.player_operations import player_operations
 
-@app.route('/player')
+@app.route('/player', methods=['GET','POST'])
 def player_page():
-    now = datetime.datetime.now()
-    return render_template('player.html', current_time=now.ctime())
+    if request.method == 'GET':
+        store = player_operations()
+        players=store.get_players()
+        now = datetime.datetime.now()
+        return render_template('player.html', players=players, current_time=now.ctime())
