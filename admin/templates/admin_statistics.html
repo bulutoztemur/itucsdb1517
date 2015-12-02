@@ -32,9 +32,19 @@
 	        <header class="panel-heading">
 	            Statistics
 	        </header>
-	        <input class="search" type="text" id="search" placeholder="Type to search">
+	        <div class="nav search-row">
+                <!--  search form start -->
+                <ul class="nav top-menu">
+                    <li>
+                        <form class="navbar-form">
+                            <input class="form-control" placeholder="Search" type="text" id="search">
+                        </form>
+                    </li>
+                </ul>
+                <!--  search form end -->
+            </div>
 	        <table id="table" class="table table-striped table-advance table-hover">
-	         <tbody>
+	        <thead>
 	            <tr>
 	               <th>Assist Number</th>
 	               <th>Block Number </th>
@@ -44,6 +54,8 @@
 	               <th>Player</th>
 	               <th> Action</th>
 	            </tr>
+	        </thead>
+	         <tbody>
 	            {% for key, statistic in statistics %}
 	            <tr>
 	               <td>{{statistic.assistnumber}}</td>

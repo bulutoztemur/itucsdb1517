@@ -32,15 +32,27 @@
 	        <header class="panel-heading">
 	            Matches
 	        </header>
-	        <input class="search" type="text" id="search" placeholder="Type to search">
+	        <div class="nav search-row">
+                <!--  search form start -->
+                <ul class="nav top-menu">
+                    <li>
+                        <form class="navbar-form">
+                            <input class="form-control" placeholder="Search" type="text" id="search">
+                        </form>
+                    </li>
+                </ul>
+                <!--  search form end -->
+            </div>
 	        <table id="table" class="table table-striped table-advance table-hover">
-	         <tbody>
+	        <thead>
 	            <tr>
 	               <th> HomeTeam</th>
 	               <th> AwayTeam</th>
 	               <th> Court</th>
 	               <th> MatchDate</th>
 	            </tr>
+	        </thead>
+	         <tbody>
 	            {% for key, match in matches %}
 	            <tr>
 	               <td>{{match.hometeam.name}}</td>
