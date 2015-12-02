@@ -4,18 +4,27 @@
 {%endblock%}
 
 {% block content %}
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-					<div class="info-box blue-bg">
-						<i class="fa fa-cloud-download"></i>
-						<div class="count">8</div>
-						<div class="title">Team</div>
-					</div><!--/.info-box-->
-				</div><!--/.col-->
-				<table>
-					{% for key, team in teams %}
-					<tr>
-					<td>{{ team.name }} ({{ team.color }})</td>
-					</tr>
-					{% endfor %}
-				</table>
+<input class="search" type="text" id="search" placeholder="Type to search">
+<br><br>
+<table id="table" class="table table-striped table-advance table-hover">
+	<tbody>
+	   <tr>
+	      <th> Team Name</th>
+	      <th>Team Color</th>
+	      <th> Foundation Date</th>
+	      <th> Country</th>
+	      <th> Court Name</th>
+	   </tr>
+    {% for key, team in teams %}
+    <tr>
+       <td>{{team.name}}</td>
+       <td>{{team.color}}</td>
+       <td>{{team.date}}</td>
+       <td>{{team.country.name}}</td>
+       <td>{{team.court.name}}</td>
+     </tr>
+	{% endfor %}
+	</tbody>
+</table>
+
 {% endblock %}
