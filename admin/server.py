@@ -51,6 +51,18 @@ from classes.operations.player_operations import player_operations
 from classes.statistic import Statistic
 from classes.operations.statistic_operations import statistic_operations
 
+from flask import render_template, request, session, redirect, url_for, flash
+from functools import wraps
+
+def admin_required(test):
+    @wraps(test)
+    def wrap(*args, **kwargs):
+        if 'admin' in session and session['admin']==True:
+            return test(*args, **kwargs)
+        else:
+            return redirect(url_for('home_page'))
+    return wrap
+
 @admin.route('/init')
 def init_db():
     store = database_initialization()
@@ -58,10 +70,12 @@ def init_db():
     return render_template('admin.html')
 
 @admin.route('/')
+@admin_required
 def admin_page():
     return render_template('admin.html')
 
 @admin.route('/country', methods=['GET','POST'])
+@admin_required
 def country_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
@@ -95,6 +109,7 @@ def country_page(key=None,operation=None,error=None):
 
 @admin.route('/country/add')
 @admin.route('/country/<int:key>')
+@admin_required
 def country_edit_page(key=None):
     store = country_operations()
     country = store.get_country(key) if key is not None else None
@@ -103,6 +118,7 @@ def country_edit_page(key=None):
 
 
 @admin.route('/teams', methods=['GET','POST'])
+@admin_required
 def team_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
@@ -143,6 +159,7 @@ def team_page(key=None,operation=None,error=None):
 
 @admin.route('/teams/add')
 @admin.route('/teams/<int:key>')
+@admin_required
 def team_edit_page(key=None):
     store = team_operations()
     storeCourt = court_operations()
@@ -154,6 +171,7 @@ def team_edit_page(key=None):
     return render_template('team_edit.html', team=team, courts=courts, countries=countries, current_time=now.ctime())
 
 @admin.route('/courts', methods=['GET','POST'])
+@admin_required
 def court_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
@@ -190,6 +208,7 @@ def court_page(key=None,operation=None,error=None):
 
 @admin.route('/courts/add')
 @admin.route('/courts/<int:key>')
+@admin_required
 def court_edit_page(key=None):
     store = court_operations()
     court = store.get_court(key) if key is not None else None
@@ -235,6 +254,7 @@ def transfer_page(key=None,operation=None,error=None):
 
 @admin.route('/transfers/add')
 @admin.route('/transfers/<int:key>')
+@admin_required
 def transfer_edit_page(key=None):
     store = transfer_operations()
     storeTeam = team_operations()
@@ -250,6 +270,7 @@ def transfer_edit_page(key=None):
 
 
 @admin.route('/hand', methods=['GET','POST'])
+@admin_required
 def hand_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
@@ -283,6 +304,7 @@ def hand_page(key=None,operation=None,error=None):
 
 @admin.route('/hand/add')
 @admin.route('/hand/<int:key>')
+@admin_required
 def hand_edit_page(key=None):
     store = hand_operations()
     hand = store.get_hand(key) if key is not None else None
@@ -291,6 +313,7 @@ def hand_edit_page(key=None):
 
 
 @admin.route('/position', methods=['GET','POST'])
+@admin_required
 def position_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
@@ -324,6 +347,7 @@ def position_page(key=None,operation=None,error=None):
 
 @admin.route('/position/add')
 @admin.route('/position/<int:key>')
+@admin_required
 def position_edit_page(key=None):
     store = position_operations()
     position = store.get_position(key) if key is not None else None
@@ -333,6 +357,7 @@ def position_edit_page(key=None):
 
 
 @admin.route('/season', methods=['GET','POST'])
+@admin_required
 def season_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
@@ -366,6 +391,7 @@ def season_page(key=None,operation=None,error=None):
 
 @admin.route('/season/add')
 @admin.route('/season/<int:key>')
+@admin_required
 def season_edit_page(key=None):
     store = season_operations()
     season = store.get_season(key) if key is not None else None
@@ -374,6 +400,7 @@ def season_edit_page(key=None):
 
 
 @admin.route('/gender', methods=['GET','POST'])
+@admin_required
 def gender_page(key=None,operation=None, error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
@@ -407,6 +434,7 @@ def gender_page(key=None,operation=None, error=None):
 
 @admin.route('/gender/add')
 @admin.route('/gender/<int:key>')
+@admin_required
 def gender_edit_page(key=None):
     store = gender_operations()
     gender = store.get_gender(key) if key is not None else None
@@ -415,6 +443,7 @@ def gender_edit_page(key=None):
 
 
 @admin.route('/coaches', methods=['GET','POST'])
+@admin_required
 def coach_page(key=None,operation=None, error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
@@ -457,6 +486,7 @@ def coach_page(key=None,operation=None, error=None):
 
 @admin.route('/coaches/add')
 @admin.route('/coaches/<int:key>')
+@admin_required
 def coach_edit_page(key=None):
     store = coach_operations()
     storeTeam = team_operations()
@@ -470,6 +500,7 @@ def coach_edit_page(key=None):
     return render_template('coach_edit.html', coach=coach, teams=teams, countries=countries, genders=genders, current_time=now.ctime())
 
 @admin.route('/matches', methods=['GET','POST'])
+@admin_required
 def match_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
@@ -508,6 +539,7 @@ def match_page(key=None,operation=None,error=None):
 
 @admin.route('/matches/add')
 @admin.route('/matches/<int:key>')
+@admin_required
 def match_edit_page(key=None):
     store = match_operations()
     storeTeam = team_operations()
@@ -521,6 +553,7 @@ def match_edit_page(key=None):
     return render_template('match_edit.html', match=match, teams=teams, courts=courts, current_time=now.ctime())
 
 @admin.route('/players', methods=['GET','POST'])
+@admin_required
 def player_page(key=None,operation=None,error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
@@ -575,6 +608,7 @@ def player_page(key=None,operation=None,error=None):
 
 @admin.route('/players/add')
 @admin.route('/players/<int:key>')
+@admin_required
 def player_edit_page(key=None):
     store = player_operations()
     storeCountry = country_operations()
@@ -595,6 +629,7 @@ def player_edit_page(key=None):
 
 
 @admin.route('/statistics', methods=['GET','POST'])
+@admin_required
 def statistic_page(key=None,operation=None, error=None):
     if request.method == 'GET':
         if request.args.get('operation') == 'delete':
@@ -637,6 +672,7 @@ def statistic_page(key=None,operation=None, error=None):
 
 @admin.route('/statistics/add')
 @admin.route('/statistics/<int:key>')
+@admin_required
 def statistic_edit_page(key=None):
     store = statistic_operations()
     storeSeason = season_operations()

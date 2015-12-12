@@ -22,6 +22,7 @@ def home_page():
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
+    session.pop('admin', None)
     flash('You were logged out')
     return redirect (url_for('login_page'))
 
@@ -34,6 +35,7 @@ def login_page():
             error = 'Invalid Credentials. Please try again.'
         else:
             session['logged_in'] = True
+            session['admin'] = True
             return redirect(url_for('home_page'))
     return render_template('login.html', error=error, current_time=now.ctime())
 
