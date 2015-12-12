@@ -24,6 +24,7 @@ def home_page():
 def logout():
     session.pop('logged_in', None)
     session.pop('admin', None)
+    session.pop('username', None)
     flash('You were logged out')
     return redirect (url_for('login_page'))
 
@@ -38,6 +39,7 @@ def login_page():
             error = 'Invalid Credentials. Please try again.'
         else:
             session['logged_in'] = True
+            session['username'] = result.username;
             if result.role == 'admin':
                 session['admin'] = True
             return redirect(url_for('home_page'))
