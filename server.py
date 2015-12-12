@@ -12,6 +12,7 @@ import team_views
 import player_views
 import statistics_views
 import countries_views
+import transfers_views
 
 app.secret_key = 'my preciousssss'
 
