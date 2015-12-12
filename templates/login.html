@@ -45,42 +45,42 @@
             <p class="login-img"><i class="icon_lock_alt"></i></p>
             <div class="input-group">
               <span class="input-group-addon"><i class="icon_profile"></i></span>
-              <input type="text" class="form-control" name="username" placeholder="Username" autofocus>
+              <input type="text" class="form-control" name="username" placeholder="Username" autofocus >
             </div>
             <div class="input-group">
                 <span class="input-group-addon"><i class="icon_key_alt"></i></span>
-                <input type="password" class="form-control" name="password" placeholder="Password">
+                <input type="password" class="form-control" name="password" placeholder="Password" >
             </div>
 		</div>
 		<div id="custom-signup" style="display:none;">
             <p class="login-img"><i class="icon_lock_alt"></i></p>
             <div class="input-group">
               <span class="input-group-addon"><i class="icon_profile"></i></span>
-              <input type="text" class="form-control" placeholder="Username" autofocus>
+              <input type="text" class="form-control" name="username_r" placeholder="Username" autofocus >
             </div>
             <div class="input-group">
                 <span class="input-group-addon"><i class="icon_key_alt"></i></span>
-                <input type="password" class="form-control" placeholder="Password">
+                <input type="password" class="form-control" name="password_r" placeholder="Password" >
             </div>
 			<div class="input-group">
                 <span class="input-group-addon"><i class="icon_group"></i></span>
-                <input type="text" class="form-control" placeholder="Name">
+                <input type="text" class="form-control" name="name" placeholder="Name" >
             </div>
 			<div class="input-group">
                 <span class="input-group-addon"><i class="icon_group"></i></span>
-                <input type="text" class="form-control" placeholder="Surname">
+                <input type="text" class="form-control" name="surname" placeholder="Surname" >
             </div>
 			<div class="input-group">
                 <span class="input-group-addon"><i class="icon_calendar"></i></span>
-                <input type="text" class="form-control" placeholder="Birthdate">
+                <input type="text" class="form-control" name="birthdate" placeholder="Birthdate" >
             </div>
 		</div>
             <label class="checkbox">
 
                 <span class="pull-right"> <a id="btnAccount" href="#" style="font-size:16px;">Don't have an account?</a></span>
             </label>
-            <button id="btnLogin" class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
-            <button id="btnSignup" class="btn btn-info btn-lg btn-block" type="submit" style="display:none;">Signup</button>
+            <button id="btnLogin" class="btn btn-primary btn-lg btn-block" name="submit" value="login" type="submit">Login</button>
+            <button id="btnSignup" class="btn btn-info btn-lg btn-block" name="submit" value="signup" type="submit" style="display:none;">Signup</button>
         </div>
 		<script>
 			$(document).ready(function(){

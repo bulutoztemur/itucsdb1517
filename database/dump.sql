@@ -910,11 +910,7 @@ SELECT pg_catalog.setval('season_objectid_seq', 4, true);
 -- Data for Name: statistic; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
-INSERT INTO userrole VALUES (1, 'user', 0);
-INSERT INTO userrole VALUES (2, 'admin', 0);
 
-INSERT INTO usertable (username, password, userroleid) VALUES ('user', 'user', 1);
-INSERT INTO usertable (username, password, userroleid) VALUES ('admin', 'admin', 2);
 
 
 INSERT INTO statistic VALUES (1, 188, 192, 170, 55, 2, 1, 0);
@@ -970,20 +966,22 @@ SELECT pg_catalog.setval('transfer_objectid_seq', 2, true);
 -- Name: userinformation_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('userinformation_objectid_seq', 1, false);
+SELECT pg_catalog.setval('userinformation_objectid_seq', 1, true);
 
 
 --
 -- Data for Name: userrole; Type: TABLE DATA; Schema: public; Owner: vagrant
 --
 
+INSERT INTO userrole VALUES (1, 'user', 0);
+INSERT INTO userrole VALUES (2, 'admin', 0);
 
 
 --
 -- Name: userrole_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('userrole_objectid_seq', 1, false);
+SELECT pg_catalog.setval('userrole_objectid_seq', 2, true);
 
 
 --
@@ -991,12 +989,14 @@ SELECT pg_catalog.setval('userrole_objectid_seq', 1, false);
 --
 
 
+INSERT INTO usertable VALUES (1, 'user', 'user', 1, Null, 0);
+INSERT INTO usertable VALUES (2, 'admin', 'admin', 2, Null, 0);
 
 --
 -- Name: usertable_objectid_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('usertable_objectid_seq', 1, false);
+SELECT pg_catalog.setval('usertable_objectid_seq', 2, true);
 
 
 --

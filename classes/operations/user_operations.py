@@ -11,7 +11,7 @@ class user_operations:
         try:
             connection = dbapi2.connect(dsn)
             cursor = connection.cursor()
-            cursor.execute("""INSERT INTO usertable (username, password, roleid) VALUES (%s, %s, 1)""",(User.username,User.password))
+            cursor.execute("""INSERT INTO usertable (username, password, userroleid) VALUES (%s, %s, 1)""",(User.username,User.password))
             cursor.close()
             connection.commit()
             result = 'success'
@@ -26,7 +26,7 @@ class user_operations:
         finally:
             if connection:
                 connection.close()
-            return result
+        return result
 
     def get_user(self, user, passw):
         global connection

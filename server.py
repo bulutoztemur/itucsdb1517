@@ -34,15 +34,22 @@ def login_page():
     error = None
     if request.method == 'POST':
         store = user_operations()
-        result=store.get_user(request.form['username'], request.form['password'])
-        if result.role is '':
-            error = 'Invalid Credentials. Please try again.'
+        if request.form['submit']=='login':
+            result=store.get_user(request.form['username'], request.form['password'])
+            if result.role is '':
+                error = 'Invalid Credentials. Please try again.'
+            else:
+                session['logged_in'] = True
+                session['username'] = request.form['username'];
+                if result.role == 'admin':
+                    session['admin'] = True
+                return redirect(url_for('home_page'))
         else:
-            session['logged_in'] = True
-            session['username'] = result.username;
-            if result.role == 'admin':
-                session['admin'] = True
-            return redirect(url_for('home_page'))
+            result=store.add_user(User(0,request.form['username_r'], request.form['password_r'],1,'',request.form['name'],request.form['surname'],request.form['birthdate']))
+            if result=='success':
+                session['logged_in'] = True
+                session['username'] = request.form['username_r'];
+                return redirect(url_for('home_page'))
     return render_template('login.html', error=error, current_time=now.ctime())
 
 if __name__ == '__main__':
