@@ -5,6 +5,7 @@ import re
 
 from classes.user import User
 from classes.operations.user_operations import user_operations
+from classes.operations.database_init import database_initialization
 from flask import render_template, request, session, redirect, url_for, flash
 from config import app, login_required
 import team_views
@@ -51,6 +52,12 @@ def login_page():
                 session['username'] = request.form['username_r'];
                 return redirect(url_for('home_page'))
     return render_template('login.html', error=error, current_time=now.ctime())
+
+@app.route('/init')
+def init_db():
+    store = database_initialization()
+    store.init_db()
+    return redirect(url_for('home_page'))
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
