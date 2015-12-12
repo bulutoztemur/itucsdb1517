@@ -1298,6 +1298,21 @@ REVOKE ALL ON SCHEMA public FROM postgres;
 GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
+CREATE OR REPLACE FUNCTION update_team_func()  
+  RETURNS trigger AS  
+$$  
+BEGIN  
+    UPDATE player SET teamid=NEW.newteamid WHERE objectid=NEW.playerid;     
+    RETURN NEW;  
+END;  
+$$  
+LANGUAGE 'plpgsql'; 
+
+CREATE TRIGGER update_team
+  AFTER INSERT 
+  ON transfer 
+  FOR EACH ROW  
+  EXECUTE PROCEDURE update_team_func();
 
 --
 -- PostgreSQL database dump complete
