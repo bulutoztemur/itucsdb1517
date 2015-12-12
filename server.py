@@ -3,21 +3,39 @@ import os
 import json
 import re
 
-from flask import render_template
-from config import app
+
+from flask import render_template, request, session, redirect, url_for, flash
+from config import app, login_required
 import team_views
 import player_views
 import statistics_views
 
+app.secret_key = 'my preciousssss'
+
+
 @app.route('/')
+@login_required
 def home_page():
     now = datetime.datetime.now()
     return render_template('home.html', current_time=now.ctime())
 
-@app.route('/login')
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    flash('You were logged out')
+    return redirect (url_for('login_page'))
+
+@app.route('/login', methods=['GET', 'POST'])
 def login_page():
     now = datetime.datetime.now()
-    return render_template('login.html', current_time=now.ctime())
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+            error = 'Invalid Credentials. Please try again.'
+        else:
+            session['logged_in'] = True
+            return redirect(url_for('home_page'))
+    return render_template('login.html', error=error, current_time=now.ctime())
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')

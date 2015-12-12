@@ -5,11 +5,12 @@ from flask import url_for
 from flask import redirect
 from flask import request
 
-from config import app
+from config import app, login_required
 from classes.statistic import Statistic
 from classes.operations.statistic_operations import statistic_operations
 
 @app.route('/statistics', methods=['GET','POST'])
+@login_required
 def statistics_page():
     if request.method == 'GET':
         store = statistic_operations()
