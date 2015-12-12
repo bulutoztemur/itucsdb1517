@@ -3,7 +3,8 @@ import os
 import json
 import re
 
-
+from classes.user import User
+from classes.operations.user_operations import user_operations
 from flask import render_template, request, session, redirect, url_for, flash
 from config import app, login_required
 import team_views
@@ -31,11 +32,14 @@ def login_page():
     now = datetime.datetime.now()
     error = None
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+        store = user_operations()
+        result=store.get_user(request.form['username'], request.form['password'])
+        if result.role is '':
             error = 'Invalid Credentials. Please try again.'
         else:
             session['logged_in'] = True
-            session['admin'] = True
+            if result.role == 'admin':
+                session['admin'] = True
             return redirect(url_for('home_page'))
     return render_template('login.html', error=error, current_time=now.ctime())
 

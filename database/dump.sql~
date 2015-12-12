@@ -913,9 +913,6 @@ SELECT pg_catalog.setval('season_objectid_seq', 4, true);
 INSERT INTO userrole VALUES (1, 'user', 0);
 INSERT INTO userrole VALUES (2, 'admin', 0);
 
-INSERT INTO usertable (username, password, userroleid) VALUES ('user', 'user', 1);
-INSERT INTO usertable (username, password, userroleid) VALUES ('admin', 'admin', 2);
-
 
 INSERT INTO statistic VALUES (1, 188, 192, 170, 55, 2, 1, 0);
 INSERT INTO statistic VALUES (2, 180, 195, 200, 25, 3, 3, 0);
