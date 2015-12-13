@@ -23,6 +23,13 @@ def home_page():
     now = datetime.datetime.now()
     return render_template('home.html', current_time=now.ctime())
 
+@app.route('/rules')
+@login_required
+def rules_page():
+    now = datetime.datetime.now()
+    return render_template('rules.html', current_time=now.ctime())
+
+
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
