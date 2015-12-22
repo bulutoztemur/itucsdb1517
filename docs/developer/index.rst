@@ -4,9 +4,18 @@ Developer Guide
 Database Design
 ---------------
 
-**explain the database design of your project**
+There are minor tables which are Courts, Hand, Position, Country, Gender, Season. Also, there are major tables which use the information provided by these minor tables. These major tables are Player, Team, Coach, Statistics, Transfers, Match. Minor tables are referenced as foreign keys to necessary corresponding columns of major tables. PostgreSQL is used to manage the database in this project.
 
-**include the E/R diagram(s)**
+Detailed database relations can be seen in the image below:
+
+   .. figure:: Diagram.png
+      :scale: 100 %
+      :alt: map to buried treasure
+
+      Database Entity Relation Diagram
+
+
+User stuff
 
 Code
 ----
