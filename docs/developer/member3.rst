@@ -106,7 +106,7 @@ Hand table includes 3 columns:
    * name
    * deleted
 
-   Name column in hand table is referenced from player table because of specifying which hand player uses.
+   Objectid column in hand table is referenced from player table because of specifying which hand player uses.
 
    SQL Code:
 
@@ -191,7 +191,7 @@ Season table includes 3 columns:
    * name
    * deleted
 
-   Name columns on season table is referenced from match, transfer and statistic tables.
+   Objectid column on season table is referenced from match, transfer and statistic tables.
 
    SQL Code:
 
