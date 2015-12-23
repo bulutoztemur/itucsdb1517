@@ -45,13 +45,13 @@ Admin can also delete an existing team by clicking the red cross near the update
 These properties are same for country and coach entities:
 
    .. figure:: admin_Country.png
-      :scale: 80 %
+      :scale: 100 %
       :alt: map to buried treasure
 
       Operations for Country section
 
    .. figure:: admin_Coach.png
-      :scale: 80 %
+      :scale: 100 %
       :alt: map to buried treasure
 
       Operations for Coach section
