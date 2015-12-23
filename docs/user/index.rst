@@ -11,7 +11,7 @@ In default, there is 2 user-role. A user is an admin or not. To enter the main p
 
       Main interface for non-admin users
 
-**Administrator users** can do all the same things. Additionally, there is an **Admin Panel** section on the menu that lets Admin users edit and manipulate the database as they like.
+**Administrator users** can do all the same things. Additionally, there is an **Admin Panel** section on the menu that lets Admin users edit and manipulate the database as they like. If an unexpected problem occurs in database, administrator can click on **initialize database** button to reinitialize database.
 
    .. figure:: admin_panel.png
       :scale: 60 %
