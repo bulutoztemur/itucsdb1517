@@ -34,7 +34,7 @@ Update an existing player by clicking *update* button:
       :scale: 80 %
       :alt: map to buried treasure
 
-      Add operation(Player section)
+      Update operation(Player section)
 
 And delete an existing player by clicking the red cross near the update button.
 
