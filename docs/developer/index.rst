@@ -93,7 +93,7 @@ These codes also imported app and login_required from config.py
 
 HTML and CSS files are places into templates/ and static/ folders. Flask framework looks for html files in the templates and css files for static in default.
 
-   .. figure:: htmlcss.png
+   .. figure:: tempsta.png
       :scale: 100 %
       :alt: map to buried treasure
 
