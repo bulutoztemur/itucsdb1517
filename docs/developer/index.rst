@@ -14,8 +14,8 @@ Detailed database relations can be seen in the image below:
 
       Database Entity Relation Diagram
 
+We have also user operations in our database design, it is seen in database diagram above. There are 3 tables to handle user operations in database which are usertable, userinformation and userrole. Login information, username and password, are kept in usertable and also it has reference from userrole to specify user role. User roles are kept in userrole table, when we initialize database there are two main roles; user and admin. Roles can be added manually from postgresql interface there is no interface for adding new role in our site design. Additional user information which are name, last name, birthdate etc. are kept in userinformation table. When a new user is registered information that he/she writes goes to this table.
 
-User stuff
 
 Code
 ----
