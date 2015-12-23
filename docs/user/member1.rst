@@ -6,7 +6,7 @@ When a user enters the our website it is redirected to the login page directly.
 /login
 
 
-   .. figure:: login_page.png
+   .. figure:: enterpage.png
       :scale: 50 %
       :alt: map to buried treasure
 
