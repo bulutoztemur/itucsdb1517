@@ -6,7 +6,7 @@ Database Design
 
 There are minor tables which are Courts, Hand, Position, Country, Gender, Season. Also, there are major tables which use the information provided by these minor tables. These major tables are Player, Team, Coach, Statistics, Transfers, Match. Minor tables are referenced as foreign keys to necessary corresponding columns of major tables. PostgreSQL is used to manage the database in this project.
 
-Detailed database relations can be seen in the image below:
+Detailed database relations can be seen in the figure 2.1
 
    .. figure:: Diagram.png
       :scale: 100 %
